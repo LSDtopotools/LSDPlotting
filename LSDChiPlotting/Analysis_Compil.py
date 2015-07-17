@@ -328,6 +328,8 @@ def make_plots():
     y_K_temperate_ff = data_temperateff['K']
     y_K_cold_ff = data_coldff['K']
     y_K_polar_ff = data_polarff['K']
+    
+    
     #########################
     #                       #
     #      MAKE PLOTS       #
@@ -2390,7 +2392,11 @@ def make_plots():
     
     # MAP 
     ax = plt.subplot(2,2,1)
-    for cli in [1,2,3,4,5]:
+    for cli in [0,1,2,3,4,5]:
+        if cli ==0 :
+            y = np.log10(y_K_ff)
+            x = x_precip_ff
+            colo = 'k'
         if cli == 1:
             y = np.log10(y_K_arid_ff)
             x = x_precip_arid_ff
@@ -2427,7 +2433,11 @@ def make_plots():
         plt.ylabel('log10 K', fontsize = axis_size)
 
     ax = plt.subplot(2,2,2)
-    for cli in [1,2,3,4,5]:
+    for cli in [0,1,2,3,4,5]:
+        if cli ==0 :
+            y = y_n_ff
+            x = x_precip_ff
+            colo ='k'
         if cli == 1:
             y = y_n_arid_ff
             x = x_precip_arid_ff
@@ -2462,12 +2472,16 @@ def make_plots():
         ax.tick_params(axis='both', width=2.5)    
         plt.xlabel('MAP', fontsize = axis_size)
         plt.ylabel('n', fontsize = axis_size)
-        plt.legend(('Arid', 'Tropical', 'Temperate', 'Cold', 'Polar'), loc='lower right', numpoints = 1)
+        #plt.legend(('Global','Arid', 'Tropical', 'Temperate', 'Cold', 'Polar'), loc='lower right', numpoints = 1)
 
 
     # MAT 
     ax = plt.subplot(2,2,3)
-    for cli in [1,2,3,4,5]:
+    for cli in [0,1,2,3,4,5]:
+        if cli ==0 :
+            y = np.log10(y_K_ff)
+            x = x_temp_ff
+            colo = 'k'
         if cli == 1:
             y = np.log10(y_K_arid_ff)
             x = x_temp_arid_ff
@@ -2504,7 +2518,11 @@ def make_plots():
         plt.ylabel('log10 K', fontsize = axis_size)
 
     ax = plt.subplot(2,2,4)
-    for cli in [1,2,3,4,5]:
+    for cli in [0,1,2,3,4,5]:
+        if cli ==0 :
+            y = y_n_ff
+            x = x_temp_ff
+            colo = 'k'
         if cli == 1:
             y = y_n_arid_ff
             x = x_temp_arid_ff
