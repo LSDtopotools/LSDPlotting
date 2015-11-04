@@ -54,10 +54,6 @@ class CRNResults(object):
                 this_line = LSDOst.RemoveEscapeCharacters(line)
                 split_line = this_line.split(',')
                 
-                # the first two elements are strings
-                DataDict[self.VariableList[0]].append(split_line[0])
-                DataDict[self.VariableList[1]].append(split_line[1])
-                
                 for index,name in enumerate(self.VariableList):
                     if name == 'sample_name':
                         DataDict[name].append(split_line[index])
@@ -161,9 +157,106 @@ class CRNResults(object):
         
         print "The filename will be: " + FileOut
 
+        # delete the existing file
+        if os.path.exists(FileOut):
+            driver.DeleteDataSource(FileOut)
+
         # create the data source
         data_source = driver.CreateDataSource(FileOut)
+        
+        # create the spatial reference, WGS84
+        srs = osr.SpatialReference()
+        srs.ImportFromEPSG(4326)
 
+        print "Creating the layer"
+
+        # create the layer
+        layer = data_source.CreateLayer("CRNData", srs, ogr.wkbPoint)
+
+        print "Adding the field names"
+
+        # Add the fields we're interested in
+        field_name = ogr.FieldDefn("SampleName", ogr.OFTString)
+        field_name.SetWidth(24)
+        layer.CreateField(field_name)
+        field_region = ogr.FieldDefn("Nuclide", ogr.OFTString)
+        field_region.SetWidth(24)
+        layer.CreateField(field_region)
+        layer.CreateField(ogr.FieldDefn("Latitude", ogr.OFTReal))
+        layer.CreateField(ogr.FieldDefn("Longitude", ogr.OFTReal))
+        layer.CreateField(ogr.FieldDefn("EffERate", ogr.OFTReal))
+        layer.CreateField(ogr.FieldDefn("EffERateU", ogr.OFTReal))
+
+        sample_name = self.GetSampleName()
+        nuclide = self.GetNuclide()
+        Latitude = self.GetLatitude()
+        Longitude = self.GetLongitude()
+        ERateU = self.GetErosionRatesUncert()
+        ERate = self.GetErosionRates()
+        
+        print "lengths are: "
+        print "SN: " + str(len(sample_name))
+        print "N: " + str(len(Latitude))
+        print "Lat: " + str(len(nuclide))
+        print "Long: " + str(len(Longitude))
+        print "Erate: " + str(len(ERate))
+        print "ErateU: " + str(len(ERateU))
+        
+        # Process the text file and add the attributes and features to the shapefile
+        for index,name in enumerate(sample_name):
+            
+            # create the feature
+            feature = ogr.Feature(layer.GetLayerDefn())
+            
+            # Set the attributes using the values from the delimited text file
+            feature.SetField("SampleName", name)
+            feature.SetField("Nuclide", nuclide[index])
+            feature.SetField("Latitude", Latitude[index])
+            feature.SetField("Longitude", Longitude[index])
+            feature.SetField("EffERate", ERate[index])
+            feature.SetField("EffERateU", ERateU[index])
+
+            # create the WKT for the feature using Python string formatting
+            wkt = "POINT(%f %f)" %  (float(Longitude[index]), float(Latitude[index]))
+
+            # Create the point from the Well Known Txt
+            point = ogr.CreateGeometryFromWkt(wkt)
+
+            # Set the feature geometry using the point
+            feature.SetGeometry(point)
+            # Create the feature in the layer (shapefile)
+            layer.CreateFeature(feature)
+            # Destroy the feature to free resources
+            feature.Destroy()
+
+        # Destroy the data source to free resources
+        data_source.Destroy()
+
+    def TraslateToReducedGeoJSON(self,FileName):
+        # Parse a delimited text file of volcano data and create a shapefile
+
+        import osgeo.ogr as ogr
+        import osgeo.osr as osr
+
+
+        #  set up the shapefile driver
+        driver = ogr.GetDriverByName("GeoJSON")
+
+        # Get the path to the file
+        this_path = LSDOst.GetPath(FileName)
+        DataName = self.FilePrefix
+        
+        FileOut = this_path+DataName+".geojson"
+        
+        print "The filename will be: " + FileOut
+
+        # delete the existing file
+        if os.path.exists(FileOut):
+            driver.DeleteDataSource(FileOut)
+
+        # create the data source
+        data_source = driver.CreateDataSource(FileOut)
+        
         # create the spatial reference, WGS84
         srs = osr.SpatialReference()
         srs.ImportFromEPSG(4326)
@@ -194,6 +287,14 @@ class CRNResults(object):
         ERateU = self.GetErosionRatesUncert()
         ERate = self.GetErosionRates()
         
+        print "lengths are: "
+        print "SN: " + str(len(sample_name))
+        print "N: " + str(len(Latitude))
+        print "Lat: " + str(len(nuclide))
+        print "Long: " + str(len(Longitude))
+        print "Erate: " + str(len(ERate))
+        print "ErateU: " + str(len(ERateU))
+        
         # Process the text file and add the attributes and features to the shapefile
         for index,name in enumerate(sample_name):
             
@@ -209,7 +310,7 @@ class CRNResults(object):
             feature.SetField("EffERateU", ERateU[index])
 
             # create the WKT for the feature using Python string formatting
-            wkt = "POINT(%f %f)" %  (float(Latitude[index]) , float(Latitude[index]))
+            wkt = "POINT(%f %f)" %  (float(Longitude[index]), float(Latitude[index]))
 
             # Create the point from the Well Known Txt
             point = ogr.CreateGeometryFromWkt(wkt)
@@ -224,4 +325,4 @@ class CRNResults(object):
         # Destroy the data source to free resources
         data_source.Destroy()
 
-        
+                
