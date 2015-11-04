@@ -10,13 +10,19 @@ import CRNResults as CRNR
 def TestCRNObject():
     
     
-    FileName = "C://code//devel_projects//LSDPlotting//SanBernData//SanBern_Spawned_CRNResults.csv"
+    #FileName = "C://code//devel_projects//LSDPlotting//SanBernData//SanBern_Spawned_CRNResults.csv"
+    FileName = "T://test_clone//topodata//CRNResults//SanBern_Spawned_CRNResults.csv"
+    
     
     thisCRNData = CRNR.CRNResults(FileName)
-    thisCRNData.GetParameterNames(True)
+    #thisCRNData.GetParameterNames(True)
+    
+    print "Erosion rates are: "    
     thisCRNData.GetErosionRates(True)
     
-    thisCRNData.GetParameterNames()
+    
+    print "Now I will translate to a shapefile"
+    thisCRNData.TraslateToReducedShapefile(FileName)
     
 if __name__ == "__main__":
     TestCRNObject() 
