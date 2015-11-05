@@ -61,7 +61,7 @@ class CRNResults(object):
                         DataDict[name].append(split_line[index])
                     else:
                         DataDict[name].append(float(split_line[index]))
-                    #print "Name is: " + name
+                    print "Name is: " + name
                     
                 #print "Finished assimilating Data Dict"
           
@@ -128,7 +128,7 @@ class CRNResults(object):
         # get the errors (as a fraction of the erosion rate)
         diffCR = np.subtract(ErateLSD,ErateCRONUS)
         #diffCC = np.abs(diffCC)
-        ErrorCR = np.subtract(diffCR,ErateLSD)
+        ErrorCR = np.divide(diffCR,ErateLSD)
         
         # add it to the data dictionary
         self.CRNData['Error_CR'] = ErrorCR        
@@ -145,10 +145,10 @@ class CRNResults(object):
         # get the errors (as a fraction of the erosion rate)
         diffCC = np.subtract(ErateLSD,ErateCOSMOCALC)
         #diffCC = np.abs(diffCC)
-        ErrorCC = np.subtract(diffCC,ErateLSD)
+        ErrorCC = np.divide(diffCC,ErateLSD)
         
         diffCR = np.subtract(ErateLSD,ErateCRONUSlike)
-        ErrorCR = np.subtract(diffCR,ErateLSD)
+        ErrorCR = np.divide(diffCR,ErateLSD)
         
         self.CRNData['Error_CC'] = ErrorCC
         self.CRNData['Error_CR_em'] = ErrorCR
@@ -186,19 +186,20 @@ class CRNResults(object):
         plt.figure(1, facecolor='white',figsize=(25,10))  
 
         # Plot 1 = comparison new_code / cosmocalc
-        ax = plt.subplot(1,3,1)
-        plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'], "o", markersize=8, color=self.CRNData['basin_relief'])
-        #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))
+        ax = plt.subplot(1,1,1)
+        plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],"o", markersize=8     )
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
+        #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
         ax.spines['top'].set_linewidth(2.5)
         ax.spines['left'].set_linewidth(2.5)
         ax.spines['right'].set_linewidth(2.5)
         ax.spines['bottom'].set_linewidth(2.5) 
         ax.tick_params(axis='both', width=2.5)    
-        plt.xlabel('erate_COSMOCALC', fontsize = axis_size-2)
-        plt.ylabel('erate_NEWCODE_mmperkyr', fontsize = axis_size-2)
+        plt.xlabel('Erosion rate in g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size-2)
+        plt.ylabel('Error between CRNAPTIOUS and CRONUS erosion rates', fontsize = axis_size-2)
         #if zoom ==1:
         #    plt.axis([0, 500, 0, 500])
-        plt.title('Cosmocalc / New_code',fontsize = label_size+6)
+        plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
         #handles, labels = ax.get_legend_handles_labels()
         #plt.legend(handles, labels, numpoints = 1, loc='upper left')
         plt.show()
