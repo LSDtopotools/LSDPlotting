@@ -70,6 +70,46 @@ class CRNResults(object):
             self.VariableList = []
             self.CRNData = {}
 
+    # This reads data from the CRONUS calculator
+    # It is not intellegent: it assumes that you have converted to csv
+    # And that you have put the samples in the same order they appear
+    # in the CRNRuslts.csv file
+    def ReadCRONUSData(self,FileName):
+
+        #See if the parameter files exist
+        if os.access(FileName,os.F_OK):
+            this_file = open(FileName, 'r')
+            lines = this_file.readlines()
+            
+            CRONUS_eff_erate = []
+            CRONUS_erate = []
+            CRONUS_ext_uncert = [] 
+            CRONUS_in_uncert = [] 
+            
+            # now get the data into the dict
+            for line in lines:
+                this_line = LSDOst.RemoveEscapeCharacters(line)
+                split_line = this_line.split(',')
+ 
+                CRONUS_eff_erate.append(float(split_line[4]))
+                CRONUS_erate.append(float(split_line[5]))
+                CRONUS_ext_uncert.append(float(split_line[6]))
+                CRONUS_in_uncert.append(float(split_line[3]))                
+                
+            # check to see if number of data elements are the same
+            ERate = self.CRNData['erate_g_percm2_peryr']
+            if (len(ERate) != len(CRONUS_eff_erate)):
+                print "CRONUS data doens't seem to be same length as other data"
+            else:
+                self.CRNData['CRONUS_erate_g_percm2_peryr'] = CRONUS_eff_erate
+                self.CRNData['CRONUS_erate_mm_peryr'] = CRONUS_erate
+                self.CRNData['CRONUS_int_uncert_mm_peryr'] = CRONUS_ext_uncert
+                self.CRNData['CRONUS_ext_uncert_mm_peryr'] = CRONUS_in_uncert
+                
+                
+        else:
+            print "Can't open CRONUS file.
+        
 
     # This gets errors between the various outputs
     def GetErrorsBetweenMethods(self):
@@ -86,9 +126,10 @@ class CRNResults(object):
         ErrorCR = np.subtract(diffCR,ErateLSD)
         
         return ErrorCC, ErrorCR
-        
-
-
+    
+    #==========================================================================    
+    #==========================================================================
+    # Get data elements
     def GetParameterNames(self,PrintToScreen = False):
         
         if PrintToScreen:        
@@ -137,9 +178,13 @@ class CRNResults(object):
         if PrintToScreen:
             print Longitude
         return Longitude
-        
+    #==========================================================================
+    #==========================================================================        
 
-    def TraslateToReducedShapefile(self,FileName):
+
+
+    # This translates the CRNData object to an Esri shapefile
+    def TranslateToReducedShapefile(self,FileName):
         # Parse a delimited text file of volcano data and create a shapefile
 
         import osgeo.ogr as ogr
@@ -232,7 +277,9 @@ class CRNResults(object):
         # Destroy the data source to free resources
         data_source.Destroy()
 
-    def TraslateToReducedGeoJSON(self,FileName):
+
+    # This translates the CRNData object to an GeoJSON
+    def TranslateToReducedGeoJSON(self,FileName):
         # Parse a delimited text file of volcano data and create a shapefile
 
         import osgeo.ogr as ogr
