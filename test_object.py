@@ -10,8 +10,9 @@ import CRNResults as CRNR
 def TestCRNObject():
     
     
-    FileName = "C://code//devel_projects//LSDPlotting//SanBernData//SanBern_Spawned_CRNResults.csv"
-    #FileName = "T://test_clone//topodata//CRNResults//SanBern_Spawned_CRNResults.csv"
+    #FileName = "C://code//devel_projects//LSDPlotting//SanBernData//SanBern_Spawned_CRNResults.csv"
+    FileName = "T://test_clone//topodata//CRNResults//SanBern_Spawned_CRNResults.csv"
+    CRONUSFileName = "T://test_clone//topodata//CRNResults//SanBern_Spawned_CRONUS.csv"
     
     
     thisCRNData = CRNR.CRNResults(FileName)
@@ -22,10 +23,13 @@ def TestCRNObject():
     
     
     print "Now I will translate to a shapefile"
-    thisCRNData.TraslateToReducedShapefile(FileName)
+    thisCRNData.TranslateToReducedShapefile(FileName)
     
     print "Now to geojson"
-    thisCRNData.TraslateToReducedGeoJSON(FileName)
+    thisCRNData.TranslateToReducedGeoJSON(FileName)
+    
+    print "Now getting CRONUS data"
+    thisCRNData.PlotERateErrors(CRONUSFileName)
     
 if __name__ == "__main__":
     TestCRNObject() 

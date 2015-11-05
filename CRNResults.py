@@ -69,6 +69,9 @@ class CRNResults(object):
         else:
             self.VariableList = []
             self.CRNData = {}
+        
+        # add a bool to let other modules know if you've got the data from CRONUS
+        self.HaveCRONUSData = False
 
     # This reads data from the CRONUS calculator
     # It is not intellegent: it assumes that you have converted to csv
@@ -94,7 +97,10 @@ class CRNResults(object):
                 CRONUS_eff_erate.append(float(split_line[4]))
                 CRONUS_erate.append(float(split_line[5]))
                 CRONUS_ext_uncert.append(float(split_line[6]))
-                CRONUS_in_uncert.append(float(split_line[3]))                
+                CRONUS_in_uncert.append(float(split_line[3])) 
+                
+            print "I got the erate from CRONUS, here is the data: " 
+            print CRONUS_eff_erate
                 
             # check to see if number of data elements are the same
             ERate = self.CRNData['erate_g_percm2_peryr']
@@ -106,10 +112,29 @@ class CRNResults(object):
                 self.CRNData['CRONUS_int_uncert_mm_peryr'] = CRONUS_ext_uncert
                 self.CRNData['CRONUS_ext_uncert_mm_peryr'] = CRONUS_in_uncert
                 
+                self.HaveCRONUSData = True
+                
                 
         else:
-            print "Can't open CRONUS file.
+            print "Can't open CRONUS file."
         
+
+    # This gets errors between the code and the CRONUS data. 
+    # THIS DOES NOT CHECK IF THE CRONUS DATA EXISTS
+    def GetErrorsBetweenCRONUS(self):
+        ErateLSD = self.CRNData['erate_g_percm2_peryr']
+        ErateCRONUS = self.CRNData['CRONUS_erate_g_percm2_peryr']
+        
+        # get the errors (as a fraction of the erosion rate)
+        diffCR = np.subtract(ErateLSD,ErateCRONUS)
+        #diffCC = np.abs(diffCC)
+        ErrorCR = np.subtract(diffCR,ErateLSD)
+        
+        # add it to the data dictionary
+        self.CRNData['Error_CR'] = ErrorCR        
+        
+        return ErrorCR
+
 
     # This gets errors between the various outputs
     def GetErrorsBetweenMethods(self):
@@ -125,7 +150,64 @@ class CRNResults(object):
         diffCR = np.subtract(ErateLSD,ErateCRONUSlike)
         ErrorCR = np.subtract(diffCR,ErateLSD)
         
+        self.CRNData['Error_CC'] = ErrorCC
+        self.CRNData['Error_CR_em'] = ErrorCR
+        
         return ErrorCC, ErrorCR
+
+
+
+    def PlotERateErrors(self,CRONUSFileName):
+ 
+        import matplotlib.pyplot as plt
+        from matplotlib import rcParams
+        #from scipy.stats import gaussian_kde
+
+        label_size = 20
+        axis_size = 26
+
+        # Set up fonts for plots
+        rcParams['font.family'] = 'sans-serif'
+        rcParams['font.sans-serif'] = ['arial']
+        rcParams['font.size'] = label_size
+    
+        #safi = 1      # Save figures as png (1 to save, otherwise 0):
+        #zoom = 1  # zoom in plots activated if value is 1
+       
+        # Check if you've got the CONUS data: don't read the file if you've already got it        
+        if(self.HaveCRONUSData != True):
+            self.ReadCRONUSData(CRONUSFileName)
+    
+        # now get the errors
+        self.GetErrorsBetweenMethods()
+        self.GetErrorsBetweenCRONUS()
+        
+        # FIGURE 1 = ERATE COMPARED TO ERATE
+        plt.figure(1, facecolor='white',figsize=(25,10))  
+
+        # Plot 1 = comparison new_code / cosmocalc
+        ax = plt.subplot(1,3,1)
+        plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'], "o", markersize=8, color=self.CRNData['basin_relief'])
+        #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))
+        ax.spines['top'].set_linewidth(2.5)
+        ax.spines['left'].set_linewidth(2.5)
+        ax.spines['right'].set_linewidth(2.5)
+        ax.spines['bottom'].set_linewidth(2.5) 
+        ax.tick_params(axis='both', width=2.5)    
+        plt.xlabel('erate_COSMOCALC', fontsize = axis_size-2)
+        plt.ylabel('erate_NEWCODE_mmperkyr', fontsize = axis_size-2)
+        #if zoom ==1:
+        #    plt.axis([0, 500, 0, 500])
+        plt.title('Cosmocalc / New_code',fontsize = label_size+6)
+        #handles, labels = ax.get_legend_handles_labels()
+        #plt.legend(handles, labels, numpoints = 1, loc='upper left')
+        plt.show()
+            
+            
+        
+        
+            
+
     
     #==========================================================================    
     #==========================================================================
@@ -209,7 +291,7 @@ class CRNResults(object):
         # create the data source
         data_source = driver.CreateDataSource(FileOut)
         
-        # create the spatial reference, WGS84
+        # create the spatial reference, in this case WGS84 (which is ESPG 4326)
         srs = osr.SpatialReference()
         srs.ImportFromEPSG(4326)
 
@@ -304,7 +386,7 @@ class CRNResults(object):
         # create the data source
         data_source = driver.CreateDataSource(FileOut)
         
-        # create the spatial reference, WGS84
+        # create the spatial reference,  in this case WGS84 (which is ESPG 4326)
         srs = osr.SpatialReference()
         srs.ImportFromEPSG(4326)
 
