@@ -221,7 +221,7 @@ class CRNResults(object):
         plt.ylabel('Error between CRNAPTIOUS and CRONUS erosion rates', fontsize = axis_size-2)
         #if zoom ==1:
         #    plt.axis([0, 500, 0, 500])
-        plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
         #handles, labels = ax.get_legend_handles_labels()
         #plt.legend(handles, labels, numpoints = 1, loc='upper left')
 
@@ -250,7 +250,7 @@ class CRNResults(object):
         plt.ylabel('Error between CRNAPTIOUS and CRONUS erosion rates', fontsize = axis_size-2)
         #if zoom ==1:
         #    plt.axis([0, 500, 0, 500])
-        plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
 
 
         ##########################################        
@@ -278,7 +278,7 @@ class CRNResults(object):
         plt.ylabel('Error between CRNAPTIOUS and CRONUS erosion rates', fontsize = axis_size-2)
         #if zoom ==1:
         #    plt.axis([0, 500, 0, 500])
-        plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
 
         ##########################################        
         # Plot 4 = comparison new_code / cosmocalc
@@ -305,14 +305,166 @@ class CRNResults(object):
         plt.ylabel('Error between CRNAPTIOUS and CRONUS erosion rates', fontsize = axis_size-2)
         #if zoom ==1:
         #    plt.axis([0, 500, 0, 500])
-        plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
 
 
         plt.show()
             
             
         
+    def PlotERateErrorsGridSpec(self,CRONUSFileName):
+ 
+        import matplotlib.pyplot as plt
+        from matplotlib import rcParams
+        from matplotlib.gridspec import GridSpec
+        #from scipy.stats import gaussian_kde
+
+        label_size = 20
+        axis_size = 26
+
+        # Set up fonts for plots
+        rcParams['font.family'] = 'sans-serif'
+        rcParams['font.sans-serif'] = ['arial']
+        rcParams['font.size'] = label_size
+    
+        #safi = 1      # Save figures as png (1 to save, otherwise 0):
+        #zoom = 1  # zoom in plots activated if value is 1
+       
+        # Check if you've got the CONUS data: don't read the file if you've already got it        
+        if(self.HaveCRONUSData != True):
+            self.ReadCRONUSData(CRONUSFileName)
+    
+        # now get the errors
+        self.GetErrorsBetweenMethods()
+        self.GetErrorsBetweenCRONUS()
         
+        # FIGURE 1 = ERATE COMPARED TO ERATE
+        Fig1 = plt.figure(1, facecolor='white',figsize=(12,9))  
+
+        
+        # generate a 120,90 grid. 
+        gs = GridSpec(90,120,bottom=0.1,left=0.1,right=0.95,top=0.95)
+
+        # get the lengths
+        #print "The lengths are: "
+        #print len(self.CRNData['AvgProdScaling'])
+        #print len(self.CRNData['Error_CR'])
+        #print len(self.CRNData['basin_relief'])
+
+        ##########################################        
+        # Plot 1 = comparison new_code / cosmocalc
+        ############################################
+        ##       
+                
+        ax = Fig1.add_subplot(gs[0:40,0:45])
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],"o", markersize=8     )
+        plt.scatter(self.CRNData['erate_g_percm2_peryr'],self.CRNData['Error_CR'],
+                    c=self.CRNData['basin_relief'], s=50, edgecolor='', 
+                    cmap=plt.get_cmap("autumn_r"))
+
+        cbar = plt.colorbar()
+        cbar.set_label('Basin Relief (m)')         
+        # the basin relief data is in self.CRNData['basin_relief']       
+        
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
+        #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
+        ax.spines['top'].set_linewidth(2.5)
+        ax.spines['left'].set_linewidth(2.5)
+        ax.spines['right'].set_linewidth(2.5)
+        ax.spines['bottom'].set_linewidth(2.5) 
+        ax.tick_params(axis='both', width=2.5)    
+        plt.xlabel('Erosion rate in g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size-2)
+        plt.ylabel('Error BERC vs CRONUS', fontsize = axis_size-4)
+        #if zoom ==1:
+        #    plt.axis([0, 500, 0, 500])
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+        #handles, labels = ax.get_legend_handles_labels()
+        #plt.legend(handles, labels, numpoints = 1, loc='upper left')
+
+        ##########################################        
+        # Plot 2 = comparison new_code / cosmocalc
+        ############################################
+        ##  
+        ax = Fig1.add_subplot(gs[0:40,70:120])
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],"o", markersize=8     )
+        plt.scatter(self.CRNData['AverageCombinedScaling'],self.CRNData['Error_CR_em'],
+                    c=self.CRNData['basin_relief'], s=50, edgecolor='', 
+                    cmap=plt.get_cmap("autumn_r"))
+
+        cbar = plt.colorbar()
+        cbar.set_label('Basin Relief (m)')         
+        # the basin relief data is in self.CRNData['basin_relief']       
+        
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
+        #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
+        ax.spines['top'].set_linewidth(2.5)
+        ax.spines['left'].set_linewidth(2.5)
+        ax.spines['right'].set_linewidth(2.5)
+        ax.spines['bottom'].set_linewidth(2.5) 
+        ax.tick_params(axis='both', width=2.5)    
+        plt.xlabel('Average combield scaling', fontsize = axis_size-2)
+        plt.ylabel('Error BERC vs COSMOCALC', fontsize = axis_size-4)
+        #if zoom ==1:
+        #    plt.axis([0, 500, 0, 500])
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+
+
+        ##########################################        
+        # Plot 3 = comparison new_code / cosmocalc
+        ############################################
+        ##  
+        ax = Fig1.add_subplot(gs[50:90, 0:45])
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],"o", markersize=8     )
+        plt.scatter(self.CRNData['AverageCombinedScaling'],self.CRNData['Error_CR'],
+                    c=self.CRNData['basin_relief'], s=50, edgecolor='', 
+                    cmap=plt.get_cmap("autumn_r"))
+
+        cbar = plt.colorbar()
+        cbar.set_label('Basin Relief (m)')         
+        # the basin relief data is in self.CRNData['basin_relief']       
+        
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
+        #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
+        ax.spines['top'].set_linewidth(2.5)
+        ax.spines['left'].set_linewidth(2.5)
+        ax.spines['right'].set_linewidth(2.5)
+        ax.spines['bottom'].set_linewidth(2.5) 
+        ax.tick_params(axis='both', width=2.5)    
+        plt.xlabel('Average combield scaling', fontsize = axis_size-2)
+        plt.ylabel('Error BERC vs CRONUS', fontsize = axis_size-4)
+        #if zoom ==1:
+        #    plt.axis([0, 500, 0, 500])
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+
+        ##########################################        
+        # Plot 4 = comparison new_code / cosmocalc
+        ############################################
+        ##  
+        ax = Fig1.add_subplot(gs[50:90,70:120])
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],"o", markersize=8     )
+        plt.scatter(self.CRNData['AverageShielding'],self.CRNData['Error_CR'],
+                    c=self.CRNData['basin_relief'], s=50, edgecolor='', 
+                    cmap=plt.get_cmap("autumn_r"))
+
+        cbar = plt.colorbar()
+        cbar.set_label('Basin Relief (m)')         
+        # the basin relief data is in self.CRNData['basin_relief']       
+        
+        #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
+        #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
+        ax.spines['top'].set_linewidth(2.5)
+        ax.spines['left'].set_linewidth(2.5)
+        ax.spines['right'].set_linewidth(2.5)
+        ax.spines['bottom'].set_linewidth(2.5) 
+        ax.tick_params(axis='both', width=2.5)    
+        plt.xlabel('Average shielding', fontsize = axis_size-2)
+        plt.ylabel('Error BERC vs CRONUS', fontsize = axis_size-4)
+        #if zoom ==1:
+        #    plt.axis([0, 500, 0, 500])
+        #plt.title('Comparison between CRNaptious and CRONUS erosion rates',fontsize = label_size+6)
+
+
+        plt.show()        
             
 
     

@@ -29,7 +29,7 @@ def TestCRNObject():
     thisCRNData.TranslateToReducedGeoJSON(FileName)
     
     print "Now getting CRONUS data"
-    thisCRNData.PlotERateErrors(CRONUSFileName)
+    thisCRNData.PlotERateErrorsGridSpec(CRONUSFileName)
     
 if __name__ == "__main__":
     TestCRNObject() 
