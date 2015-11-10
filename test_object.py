@@ -20,8 +20,7 @@ def TestCRNObject():
     
     print "Erosion rates are: "    
     thisCRNData.GetErosionRates(True)
-    
-    
+        
     print "Now I will translate to a shapefile"
     thisCRNData.TranslateToReducedShapefile(FileName)
     
@@ -29,7 +28,10 @@ def TestCRNObject():
     thisCRNData.TranslateToReducedGeoJSON(FileName)
     
     print "Now getting CRONUS data"
-    thisCRNData.PlotERateErrorsGridSpec(CRONUSFileName)
+    #thisCRNData.PlotERateErrorsGridSpec(CRONUSFileName)
+    
+    
+    thisCRNData.PlotERateErrorsRefined(CRONUSFileName)
     
 if __name__ == "__main__":
     TestCRNObject() 
