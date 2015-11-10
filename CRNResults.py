@@ -104,8 +104,8 @@ class CRNResults(object):
                 CRONUS_ext_uncert.append(float(split_line[6]))
                 CRONUS_in_uncert.append(float(split_line[3])) 
                 
-            print "I got the erate from CRONUS, here is the data: " 
-            print CRONUS_eff_erate
+            #print "I got the erate from CRONUS, here is the data: " 
+            #print CRONUS_eff_erate
                 
             # check to see if number of data elements are the same
             ERate = self.CRNData['erate_g_percm2_peryr']
@@ -541,7 +541,7 @@ class CRNResults(object):
         
         FileOut = this_path+DataName+".shp"
         
-        print "The filename will be: " + FileOut
+        #print "The filename will be: " + FileOut
 
         # delete the existing file
         if os.path.exists(FileOut):
@@ -580,13 +580,13 @@ class CRNResults(object):
         ERateU = self.GetErosionRatesUncert()
         ERate = self.GetErosionRates()
         
-        print "lengths are: "
-        print "SN: " + str(len(sample_name))
-        print "N: " + str(len(Latitude))
-        print "Lat: " + str(len(nuclide))
-        print "Long: " + str(len(Longitude))
-        print "Erate: " + str(len(ERate))
-        print "ErateU: " + str(len(ERateU))
+        #print "lengths are: "
+        #print "SN: " + str(len(sample_name))
+        #print "N: " + str(len(Latitude))
+        #print "Lat: " + str(len(nuclide))
+        #print "Long: " + str(len(Longitude))
+        #print "Erate: " + str(len(ERate))
+        #print "ErateU: " + str(len(ERateU))
         
         # Process the text file and add the attributes and features to the shapefile
         for index,name in enumerate(sample_name):
@@ -654,7 +654,7 @@ class CRNResults(object):
         # create the layer
         layer = data_source.CreateLayer("CRNData", srs, ogr.wkbPoint)
 
-        print "Adding the field names"
+        #print "Adding the field names"
 
         # Add the fields we're interested in
         field_name = ogr.FieldDefn("SampleName", ogr.OFTString)
@@ -675,13 +675,13 @@ class CRNResults(object):
         ERateU = self.GetErosionRatesUncert()
         ERate = self.GetErosionRates()
         
-        print "lengths are: "
-        print "SN: " + str(len(sample_name))
-        print "N: " + str(len(Latitude))
-        print "Lat: " + str(len(nuclide))
-        print "Long: " + str(len(Longitude))
-        print "Erate: " + str(len(ERate))
-        print "ErateU: " + str(len(ERateU))
+        #print "lengths are: "
+        #print "SN: " + str(len(sample_name))
+        #print "N: " + str(len(Latitude))
+        #print "Lat: " + str(len(nuclide))
+        #print "Long: " + str(len(Longitude))
+        #print "Erate: " + str(len(ERate))
+        #print "ErateU: " + str(len(ERateU))
         
         # Process the text file and add the attributes and features to the shapefile
         for index,name in enumerate(sample_name):
