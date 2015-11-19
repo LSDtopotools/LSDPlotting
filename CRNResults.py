@@ -44,6 +44,9 @@ class CRNResults(object):
             # Now get a list with the names of the parameters                        
             self.VariableList = this_line.split(',')
             
+            #print "Variable list is: "
+            #print self.VariableList
+            
             # get rid of the names
             del lines[0]             
             
@@ -72,6 +75,7 @@ class CRNResults(object):
           
             self.CRNData = DataDict
         else:
+            print "Uh oh I could not open that file"
             self.VariableList = []
             self.CRNData = {}
         
@@ -502,7 +506,7 @@ class CRNResults(object):
         for tick in ax.xaxis.get_major_ticks():
             tick.set_pad(10)
             
-        plt.xlabel('Average combined scaling', fontsize = axis_size-2)
+        plt.xlabel('Average shielding', fontsize = axis_size-2)
         plt.ylabel('($\epsilon_{CR}$-$\epsilon_{BERC}$)/$\epsilon_{BERC}$', fontsize = axis_size-4)
 
 
@@ -541,7 +545,16 @@ class CRNResults(object):
         ##  
         ax = Fig1.add_subplot(gs[50:90,70:120])
 
-        linetest = np.arange(0,np.max(self.CRNData['erate_g_percm2_peryr']+np.max(self.CRNData['total_uncert'])),0.1)
+        linetest = np.arange(0,np.max(self.CRNData['erate_g_percm2_peryr']+np.max(self.CRNData['total_uncert'])),0.01)
+        
+        print "Here is the line"
+        print linetest
+        
+        print "max: "
+        print np.max(self.CRNData['erate_g_percm2_peryr']+np.max(self.CRNData['total_uncert']))
+        
+        #print "err: "
+        #print 
 
         CRONUS_err = self.CRNData['CRONUS_total_uncert']
         BERC_err = self.CRNData['total_uncert']      
@@ -576,8 +589,8 @@ class CRNResults(object):
         plt.xlabel('$\epsilon_{BERC}$ g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size-2)
         plt.ylabel('$\epsilon_{CR}$ g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size-4)
 
-
-        plt.savefig('yo2.png', format='png')
+        figname = LSDOst.GetPath(CRONUSFileName)+'Erate_comparison.pdf'
+        plt.savefig(figname, format='pdf')
         #plt.show()       
     
     #==========================================================================    
@@ -603,6 +616,21 @@ class CRNResults(object):
         if PrintToScreen:
             print ERateU
         return ERateU
+
+    def GetCRONUSErosionRates(self,PrintToScreen = False):
+        ERate = self.CRNData['CRONUS_erate_g_percm2_peryr']
+        
+        if PrintToScreen:
+            print ERate
+        return ERate
+
+    def GetCRONUSErosionRatesUncert(self,PrintToScreen = False):
+        ERateU = self.CRNData['CRONUS_total_uncert']
+        
+        if PrintToScreen:
+            print ERateU
+        return ERateU
+
 
     def GetSampleName(self,PrintToScreen = False):
         SampleName = self.CRNData['sample_name']
@@ -631,6 +659,35 @@ class CRNResults(object):
         if PrintToScreen:
             print Longitude
         return Longitude
+
+    def GetError_CR(self,PrintToScreen = False):
+        ErrorCR = self.CRNData['Error_CR'] 
+        
+        if PrintToScreen:
+            print ErrorCR
+        return ErrorCR        
+
+    def GetError_CC(self,PrintToScreen = False):
+        ErrorCC = self.CRNData['Error_CC'] 
+        
+        if PrintToScreen:
+            print ErrorCC
+        return ErrorCC  
+
+    def GetError_CR_em(self,PrintToScreen = False):
+        ErrorCR_em = self.CRNData['Error_CR_em'] 
+        
+        if PrintToScreen:
+            print ErrorCR_em
+        return ErrorCR_em       
+
+    def GetAverageCombinedScaling(self,PrintToScreen = False):
+        Scale = self.CRNData['AverageCombinedScaling'] 
+        
+        if PrintToScreen:
+            print Scale
+        return Scale   
+        
     #==========================================================================
     #==========================================================================        
 
