@@ -18,6 +18,7 @@ from glob import glob
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.gridspec import GridSpec
+import os
         #from scipy.stats import gaussian_kde
 
 
@@ -37,7 +38,7 @@ def CRBERCvsReported():
         NoDirFname = LSDost.GetFileNameNoPath(fname)
         
         # Now get the prefix of the file
-        splitfname = NoDirFname.split('_CRNResults.csv')
+        splitfname = NoDirFname.split('_CompareResults.csv')
         fprefix = splitfname[0]
 
         print "File prefix is: " + fprefix 
@@ -48,7 +49,7 @@ def CRBERCvsReported():
     
         #See if the parameter files exist
         if os.access(fname,os.F_OK):
-            this_file = open(FileName, 'r')
+            this_file = open(fname, 'r')
             lines = this_file.readlines()
             
             # get rid fo the first line
@@ -93,7 +94,8 @@ def CRBERCvsReported():
     rcParams['font.family'] = 'sans-serif'
     rcParams['font.sans-serif'] = ['arial']
     rcParams['font.size'] = label_size
-       
+    rcParams['xtick.major.size'] = 10    
+    rcParams['ytick.major.size'] = 10       
         
     # now make plots based on these data
     Fig1 = plt.figure(1, facecolor='white',figsize=(10,7.5))  
@@ -101,11 +103,15 @@ def CRBERCvsReported():
     # generate a 120,90 grid. 
     gs = GridSpec(100,75,bottom=0.1,left=0.1,right=0.95,top=0.95) 
     ax = Fig1.add_subplot(gs[5:100, 10:75])    
+
+   
+    cmap = plt.cm.jet   
+    colo = 0    
     
     for index,thisdict in enumerate(SiteDicts):
-        colo = 0
+        
         colo = colo + (1.000/len(SiteDicts))
-        plt.plot(thisdict['erate_cronus'], thisdict['erate_cmperkyr']*10, "o", markersize=8, color=cmap(colo), label = SiteNames[index])
+        plt.plot(thisdict['BERC_shield'], thisdict['Report_shield'], "o", markersize=8, color=cmap(colo), label = SiteNames[index])
 
     #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
     #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
@@ -118,9 +124,16 @@ def CRBERCvsReported():
     ax.tick_params(axis='both', width=2.5, pad = 2)
     for tick in ax.xaxis.get_major_ticks():
             tick.set_pad(10)
+    for tick in ax.yaxis.get_major_ticks():
+            tick.set_pad(10)
             
-        plt.xlabel('Average combined scaling', fontsize = axis_size-2)
-        plt.ylabel('($\epsilon_{CR}$-$\epsilon_{BERC}$)/$\epsilon_{BERC}$', fontsize = axis_size-4)        
+    plt.xlabel('BERC topographic shielding', fontsize = axis_size-6)
+    plt.ylabel('Reported topographic shielding', fontsize = axis_size-6) 
+    handles, labels = ax.get_legend_handles_labels()    
+    plt.legend(handles, labels, numpoints = 1, loc='lower right')
+    plt.show()       
         
-        
+
+if __name__ == "__main__":
+    CRBERCvsReported()         
     
