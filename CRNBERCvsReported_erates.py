@@ -142,7 +142,11 @@ def CRBERCvsReported_erates():
     plt.ylabel('Reported erosion rate (mm/kyr)', fontsize = axis_size-6) 
     handles, labels = ax.get_legend_handles_labels()    
     plt.legend(handles, labels, numpoints = 1, loc='lower right')
-    plt.show()       
+
+    #plt.show()       
+    Fileformat = "svg"
+    plt.savefig(Dirname+"BERC_vs_Reported_erates.svg",format = Fileformat)
+    
         
 
 if __name__ == "__main__":

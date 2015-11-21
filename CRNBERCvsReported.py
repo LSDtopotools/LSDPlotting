@@ -111,7 +111,8 @@ def CRBERCvsReported():
     for index,thisdict in enumerate(SiteDicts):
         
         colo = colo + (1.000/len(SiteDicts))
-        plt.plot(thisdict['BERC_shield'], thisdict['Report_shield'], "o", markersize=8, color=cmap(colo), label = SiteNames[index])
+        plt.plot(thisdict['BERC_shield'], thisdict['Report_shield'], "o", markersize=10, color=cmap(colo), label = SiteNames[index],markeredgewidth = 2)
+
 
     #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
     #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
@@ -131,7 +132,10 @@ def CRBERCvsReported():
     plt.ylabel('Reported topographic shielding', fontsize = axis_size-6) 
     handles, labels = ax.get_legend_handles_labels()    
     plt.legend(handles, labels, numpoints = 1, loc='lower right')
-    plt.show()       
+
+    #plt.show()       
+    Fileformat = "svg"
+    plt.savefig(Dirname+"BERC_vs_Reported_toposhield.svg",format = Fileformat)     
         
 
 if __name__ == "__main__":
