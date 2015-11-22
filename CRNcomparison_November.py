@@ -18,9 +18,9 @@ from matplotlib.gridspec import GridSpec
 
 
 def CollateCRNData():
-
-    #Directory = "C://basin_data//CosmoPaper//Results//Compiled//"
-    Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
+    
+    Directory = "C://basin_data//CosmoPaper//Results//Compiled//"
+    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     
@@ -37,6 +37,8 @@ def CollateCRNData():
     rcParams['font.family'] = 'sans-serif'
     rcParams['font.sans-serif'] = ['arial']
     rcParams['font.size'] = label_size
+    rcParams['xtick.major.size'] = 10    
+    rcParams['ytick.major.size'] = 10    
        
     # loop through the directory, getting the results from the data    
     for fname in glob(Dirname+"*_CRNResults.csv"):
@@ -67,9 +69,6 @@ def CollateCRNData():
     
     #===========================================================================    
     # now make plots based on these data
-    plt.rcParams['xtick.major.size'] = 10    
-    plt.rcParams['ytick.major.size'] = 10
-
     Fig1 = plt.figure(1, facecolor='white',figsize=(10,7.5))  
 
     # generate a 120,90 grid. 
@@ -83,7 +82,8 @@ def CollateCRNData():
     
     for index,CRNObj in enumerate( CRNDataList):
         colo = colo + (1.000/len(CRNprefixes))
-        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CR(), "o", markersize=10, color=cmap(colo), label = CRNprefixes[index])
+        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CR(), "o",
+                markersize=10, color=cmap(colo), label = CRNprefixes[index],markeredgewidth=2.5)
 
     ax.spines['top'].set_linewidth(2.5)
     ax.spines['left'].set_linewidth(2.5)
@@ -132,7 +132,8 @@ def CollateCRNData():
 
     for index,CRNObj in enumerate( CRNDataList):
         colo = colo + (1.000/len(CRNprefixes))
-        ax.plot(CRNObj.GetErosionRates(),CRNObj.GetError_CR(), "o", markersize=10, color=cmap(colo), label = CRNprefixes[index])
+        ax.plot(CRNObj.GetErosionRates(),CRNObj.GetError_CR(), "o", markersize=10, 
+                color=cmap(colo), label = CRNprefixes[index],markeredgewidth=2.5)
 
     ax.spines['top'].set_linewidth(2.5)
     ax.spines['left'].set_linewidth(2.5)
@@ -182,7 +183,8 @@ def CollateCRNData():
 
     for index,CRNObj in enumerate( CRNDataList):
         colo = colo + (1.000/len(CRNprefixes))
-        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CC(), "o", markersize=10, color=cmap(colo), label = CRNprefixes[index])
+        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CC(), "o",
+                markersize=10, color=cmap(colo), label = CRNprefixes[index],markeredgewidth=2.5)
 
     ax.spines['top'].set_linewidth(2.5)
     ax.spines['left'].set_linewidth(2.5)
@@ -232,7 +234,8 @@ def CollateCRNData():
 
     for index,CRNObj in enumerate( CRNDataList):
         colo = colo + (1.000/len(CRNprefixes))
-        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CR_em(), "o", markersize=10, color=cmap(colo), label = CRNprefixes[index])
+        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CR_em(), "o",
+                markersize=10, color=cmap(colo), label = CRNprefixes[index],markeredgewidth=2.5)
 
     ax.spines['top'].set_linewidth(2.5)
     ax.spines['left'].set_linewidth(2.5)

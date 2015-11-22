@@ -111,7 +111,8 @@ def CRBERCvsReported():
     for index,thisdict in enumerate(SiteDicts):
         
         colo = colo + (1.000/len(SiteDicts))
-        plt.plot(thisdict['BERC_shield'], thisdict['Report_shield'], "o", markersize=10, color=cmap(colo), label = SiteNames[index],markeredgewidth = 2)
+        plt.plot(thisdict['BERC_shield'], thisdict['Report_shield'], "o", 
+                 markersize=10, color=cmap(colo), label = SiteNames[index],markeredgewidth = 2)
 
 
     #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
