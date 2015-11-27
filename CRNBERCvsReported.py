@@ -29,7 +29,8 @@ def CRBERCvsReported():
     #Fname = "Palumbo*_CompareResults.csv"
     
     SiteNames = []
-    SiteDicts = []    
+    SiteDicts = []   
+    PaperNames = []      
     
     # loop through the directory, getting the results from the data    
     for fname in glob(Dirname+"*_CompareResults.csv"):
@@ -46,6 +47,22 @@ def CRBERCvsReported():
         # add to the sitenames list and create a holding dictionary
         SiteNames.append(fprefix)
         thisdict = {}
+
+        # now get the prefixes
+        if fprefix == "Bierman":
+            PaperNames.append("Bierman et al., 2005")
+        elif fprefix == "Dethier":
+            PaperNames.append("Dethier et al., 2014")
+        elif fprefix == "Kirchner":
+            PaperNames.append("Kirchner et al., 2001")                
+        elif fprefix == "Munak":
+            PaperNames.append("Munack et al., 2014")            
+        elif fprefix == "Scherler":
+            PaperNames.append("Scherler et al., 2014")
+        elif fprefix == "Safran":
+            PaperNames.append("Safran et al., 2005") 
+        elif fprefix == "Palumbo":
+            PaperNames.append("Palumbo et al., 2010")   
     
         #See if the parameter files exist
         if os.access(fname,os.F_OK):
@@ -81,28 +98,27 @@ def CRBERCvsReported():
             thisdict["BERC_shield"] = BERC_shield
             thisdict["Report_shield"] = Report_shield                        
             SiteDicts.append(thisdict)  
-            
     
-    # This list will store the crn data
-    CRNDataList = []  
-    CRNprefixes = []
-    
-    label_size = 18
-    axis_size = 26
+    label_size = 8
+    axis_size = 12
 
     # Set up fonts for plots
     rcParams['font.family'] = 'sans-serif'
     rcParams['font.sans-serif'] = ['arial']
     rcParams['font.size'] = label_size
-    rcParams['xtick.major.size'] = 10    
-    rcParams['ytick.major.size'] = 10       
+    rcParams['xtick.major.size'] = 4    
+    rcParams['ytick.major.size'] = 4
+    rcParams['legend.fontsize'] = label_size
+    rcParams['legend.handletextpad'] = 0.02
+    rcParams['legend.labelspacing'] =0.1
+    rcParams['legend.columnspacing'] =0.05        
         
     # now make plots based on these data
-    Fig1 = plt.figure(1, facecolor='white',figsize=(10,7.5))  
+    Fig1 = plt.figure(1, facecolor='white',figsize=(3.26,3.26))  
 
     # generate a 120,90 grid. 
-    gs = GridSpec(100,75,bottom=0.1,left=0.1,right=0.95,top=0.95) 
-    ax = Fig1.add_subplot(gs[5:100, 10:75])    
+    gs = GridSpec(100,75,bottom=0.13,left=0.13,right=0.98,top=0.85) 
+    ax = Fig1.add_subplot(gs[10:100,5:75]) 
 
    
     cmap = plt.cm.jet   
@@ -112,31 +128,32 @@ def CRBERCvsReported():
         
         colo = colo + (1.000/len(SiteDicts))
         plt.plot(thisdict['BERC_shield'], thisdict['Report_shield'], "o", 
-                 markersize=10, color=cmap(colo), label = SiteNames[index],markeredgewidth = 2)
+                 markersize=4, color=cmap(colo), label = PaperNames[index],markeredgewidth = 1)
 
 
     #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
     #plt.errorbar(datazz['erate_cosmocalc']*10, datazz['erate_cmperkyr']*10, xerr=datazz['error_cosmocalc'], yerr=datazz['error_newcode'], fmt='o',color = cmap(colo))  
-    ax.spines['top'].set_linewidth(2.5)
-    ax.spines['left'].set_linewidth(2.5)
-    ax.spines['right'].set_linewidth(2.5)
-    ax.spines['bottom'].set_linewidth(2.5) 
+    ax.spines['top'].set_linewidth(1)
+    ax.spines['left'].set_linewidth(1)
+    ax.spines['right'].set_linewidth(1)
+    ax.spines['bottom'].set_linewidth(1) 
     
     # This gets all the ticks, and pads them away from the axis so that the corners don't overlap        
-    ax.tick_params(axis='both', width=2.5, pad = 2)
+    ax.tick_params(axis='both', width=1, pad = 2)
     for tick in ax.xaxis.get_major_ticks():
-            tick.set_pad(10)
+            tick.set_pad(3)
     for tick in ax.yaxis.get_major_ticks():
-            tick.set_pad(10)
+            tick.set_pad(3)
             
-    plt.xlabel('BERC topographic shielding', fontsize = axis_size-6)
-    plt.ylabel('Reported topographic shielding', fontsize = axis_size-6) 
+    plt.xlabel('BERC topographic shielding', fontsize = axis_size)
+    plt.ylabel('Reported topographic shielding', fontsize = axis_size) 
     handles, labels = ax.get_legend_handles_labels()    
-    plt.legend(handles, labels, numpoints = 1, loc='lower right')
-
+    plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
+               loc=3, ncol=2, mode="expand", borderaxespad=0.)
+               
     #plt.show()       
     Fileformat = "svg"
-    plt.savefig(Dirname+"BERC_vs_Reported_toposhield.svg",format = Fileformat)     
+    plt.savefig(Dirname+"CAERN_vs_Reported_toposhield.svg",format = Fileformat)     
         
 
 if __name__ == "__main__":
