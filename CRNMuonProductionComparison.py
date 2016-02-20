@@ -16,9 +16,8 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.gridspec import GridSpec
 
-def get_production_data():
+def get_production_data(Directory):
     
-    Directory = "C://basin_data//CosmoPaper//Results//"
     #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
@@ -56,9 +55,14 @@ def get_production_data():
 
 
 def plot_production_rates():
+
+    Directory = "C://basin_data//CosmoPaper//Results//"
+    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
+    Dirname = LSDost.ReformatSeperators(Directory)
+    Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     
     # get the data
-    prod_data = get_production_data()
+    prod_data = get_production_data(Directory)
     pdata = np.asarray(prod_data)
     
     depth = pdata[:,0]
@@ -117,7 +121,7 @@ def plot_production_rates():
     for tick in ax.yaxis.get_major_ticks():
         tick.set_pad(3)     
 
-    plt.xlabel('Muon production (atoms/g)', fontsize = axis_size)
+    plt.xlabel('Muon production (atoms g$^{-1}$ yr$^{-1}$)', fontsize = axis_size)
     plt.ylabel('Depth (g cm$^{-2}$)', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
@@ -157,7 +161,7 @@ def plot_production_rates():
     for tick in ax2.yaxis.get_major_ticks():
         tick.set_pad(3)     
 
-    plt.xlabel('Total production (atoms/g)', fontsize = axis_size)
+    plt.xlabel('Total production (atoms g$^{-1}$ yr$^{-1}$)', fontsize = axis_size)
     plt.ylabel('Depth (g cm$^{-2}$)', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax2.get_legend_handles_labels()
@@ -165,7 +169,7 @@ def plot_production_rates():
     #           loc=4, ncol=1, mode="expand", borderaxespad=0.2, fontsize = 8)   
     plt.legend(handles, labels, numpoints = 3, loc=4, ncol=1, borderaxespad=0.5)     
 
-       
+    plt.savefig(Dirname+"MuonProductionComparison.svg",format = Fileformat)     
     plt.show()
     
     
