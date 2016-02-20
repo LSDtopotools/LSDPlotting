@@ -19,8 +19,8 @@ from matplotlib.gridspec import GridSpec
 
 def CollateCRNData():
     
-    #Directory = "C://basin_data//CosmoPaper//Results//Compiled//"
-    Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
+    Directory = "C://basin_data//CosmoPaper//Results//Compiled//"
+    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     
