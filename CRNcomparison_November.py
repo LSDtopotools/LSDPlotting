@@ -182,7 +182,7 @@ def CollateCRNData():
         
         
     plt.xlabel('$E_{CAIRN}$ g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size)
-    plt.ylabel('($E_{CAIRN}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
+    plt.ylabel('($E_{CR}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
