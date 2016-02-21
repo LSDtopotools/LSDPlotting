@@ -172,7 +172,7 @@ def CRBERCvsReported_erates():
     ax.set_yscale('log')
     ax.set_xscale('log')
             
-    plt.xlabel('CAERN denudation rate (mm/kyr)', fontsize = axis_size)
+    plt.xlabel('CAIRN denudation rate (mm/kyr)', fontsize = axis_size)
     plt.ylabel('Reported denudation rate (mm/kyr)', fontsize = axis_size) 
     handles, labels = ax.get_legend_handles_labels()    
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
@@ -180,7 +180,7 @@ def CRBERCvsReported_erates():
 
     #plt.show()       
     Fileformat = "svg"
-    plt.savefig(Dirname+"CAERN_vs_Reported_erates.svg",format = Fileformat)
+    plt.savefig(Dirname+"CAIRN_vs_Reported_erates.svg",format = Fileformat)
     
         
 

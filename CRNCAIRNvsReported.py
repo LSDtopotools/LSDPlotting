@@ -145,7 +145,7 @@ def CRBERCvsReported():
     for tick in ax.yaxis.get_major_ticks():
             tick.set_pad(3)
             
-    plt.xlabel('BERC topographic shielding', fontsize = axis_size)
+    plt.xlabel('CAIRN topographic shielding', fontsize = axis_size)
     plt.ylabel('Reported topographic shielding', fontsize = axis_size) 
     handles, labels = ax.get_legend_handles_labels()    
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
@@ -153,7 +153,7 @@ def CRBERCvsReported():
                
     #plt.show()       
     Fileformat = "svg"
-    plt.savefig(Dirname+"CAERN_vs_Reported_toposhield.svg",format = Fileformat)     
+    plt.savefig(Dirname+"CAIRN_vs_Reported_toposhield.svg",format = Fileformat)     
         
 
 if __name__ == "__main__":
