@@ -239,7 +239,7 @@ def CollateCRNData():
                loc=3, ncol=2, mode="expand", borderaxespad=0.)    
         
     #plt.show()    
-    plt.savefig(Dirname+"COSOMOCALC_vs_error.svg",format = Fileformat)        
+    plt.savefig(Dirname+"COSMOCALC_vs_error.svg",format = Fileformat)        
     Fig3.clf() 
 
         
@@ -289,7 +289,7 @@ def CollateCRNData():
                loc=3, ncol=2, mode="expand", borderaxespad=0.)    
         
     #plt.show()    
-    plt.savefig(Dirname+"COSOMOCALC_CRem_vs_error.svg",format = Fileformat)           
+    plt.savefig(Dirname+"COSMOCALC_CRem_vs_error.svg",format = Fileformat)           
     Fig4.clf()         
 
 if __name__ == "__main__":
