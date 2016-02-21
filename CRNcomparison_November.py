@@ -118,7 +118,7 @@ def CollateCRNData():
     
     
     plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
-    plt.ylabel('($E_{CR}$-$E_{CAERN}$)/$E_{CAERN}$', fontsize = axis_size)
+    plt.ylabel('($E_{CR}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
@@ -181,8 +181,8 @@ def CollateCRNData():
     #    tick.tick_params(width = 2.5)  
         
         
-    plt.xlabel('$E_{CAERN}$ g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size)
-    plt.ylabel('($E_{CAERN}$-$E_{CAERN}$)/$E_{CAERN}$', fontsize = axis_size)
+    plt.xlabel('$E_{CAIRN}$ g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size)
+    plt.ylabel('($E_{CAIRN}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
@@ -232,14 +232,14 @@ def CollateCRNData():
         
         
     plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
-    plt.ylabel('($E_{CC}$-$E_{CAERN}$)/$E_{CAERN}$', fontsize = axis_size)
+    plt.ylabel('($E_{CC}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
                loc=3, ncol=2, mode="expand", borderaxespad=0.)    
         
     #plt.show()    
-    plt.savefig(Dirname+"CSOMOCALC_vs_error.svg",format = Fileformat)        
+    plt.savefig(Dirname+"COSOMOCALC_vs_error.svg",format = Fileformat)        
     Fig3.clf() 
 
         
@@ -282,14 +282,14 @@ def CollateCRNData():
         
         
     plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
-    plt.ylabel('($E_{CC-CRONUS}$-$E_{CAERN}$)/$E_{CAERN}$', fontsize = axis_size)
+    plt.ylabel('($E_{CC-CRONUS}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
                loc=3, ncol=2, mode="expand", borderaxespad=0.)    
         
     #plt.show()    
-    plt.savefig(Dirname+"CSOMOCALC_CRem_vs_error.svg",format = Fileformat)           
+    plt.savefig(Dirname+"COSOMOCALC_CRem_vs_error.svg",format = Fileformat)           
     Fig4.clf()         
 
 if __name__ == "__main__":
