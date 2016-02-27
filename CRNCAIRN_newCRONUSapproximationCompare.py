@@ -26,7 +26,7 @@ from matplotlib.gridspec import GridSpec
 
 def CollatenewCRONUScomparisonCRNData():
     
-    Directory = "C://basin_data//CosmoPaper//Results//Compiled//"
+    Directory = "C://basin_data//CosmoPaper//Results//Compiled//Brauch_vs_newCRONUS//"
     #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
@@ -51,15 +51,11 @@ def CollatenewCRONUScomparisonCRNData():
     rcParams['legend.fontsize'] = label_size
     rcParams['legend.handletextpad'] = 0.05
     rcParams['legend.labelspacing'] =0.1
-    rcParams['legend.columnspacing'] =0.1
-
-    SiteDicts = []   
+    rcParams['legend.columnspacing'] =0.1 
        
     # loop through the directory, getting the results from the data    
     for fname in glob(Dirname+"*_CRNResults.csv"):
   
-        # this will hold the lists of data
-        thisdict = {}
         
         # get only the file without the data directory
         NoDirFname = LSDost.GetFileNameNoPath(fname)
@@ -68,38 +64,34 @@ def CollatenewCRONUScomparisonCRNData():
         splitfname = NoDirFname.split('_CRNResults.csv')
         fprefix = splitfname[0]
         
-        # now produce the cronus name from this prefix
-        CRONUS_name = Dirname+fprefix+"_CRONUS.csv"
-        
         print "File prefix is: " + fprefix 
-        print "Cronus_name is: " + CRONUS_name
         
         # now read in the data
         thisCRNData = CRNR.CRNResults(fname)        
-
-        # read in the Cronus data and get the errors
-        thisCRNData.ReadCRONUSData(CRONUS_name)
-        thisCRNData.GetErrorsBetweenMethods()
-        thisCRNData.GetErrorsBetweenCRONUS()
         
         CRNDataList.append(thisCRNData)
         CRNprefixes.append(fprefix)
         
         # now get the prefixes
-        if fprefix == "Dethier":
+        if "Dethier" in fprefix:
             PaperNames.append("Dethier et al., 2014")
-        elif fprefix == "Palumbo":
+        elif "Palumbo" in fprefix:
             PaperNames.append("Palumbo et al., 2010")
             
         # now get lists based on this data and place into a dictionary
-        if "newCRONUS" in fname:
-            ScalingNames.append("newCronus") 
+        if "newCRONUS" in fprefix:
+            #print "I found newCRONUS in the file prefix: " + fprefix
+            ScalingNames.append("newCRONUS") 
         else:
+            #print "Sorry, I didn't find the file prefix newCRONUS in " + fprefix
             ScalingNames.append("Braucher")                  
         
 
     # now get the errors
     for index,CRNObj in enumerate( CRNDataList):
+        #print "Looking for scaling and paper names"
+        #print "paper name is: " + PaperNames[index]
+        #print "scaling name is: " +ScalingNames[index]
         if "Dethier" in PaperNames[index]:
             if "newCRONUS" in ScalingNames[index]:
                 dethier_index_newCRONUS = index
@@ -108,24 +100,33 @@ def CollatenewCRONUScomparisonCRNData():
         elif "Palumbo" in PaperNames[index]:
             if "newCRONUS" in ScalingNames[index]:
                 palumbo_index_newCRONUS = index
+                #print "I got the palumbo newcronus index"
             else:
                 palumbo_index_braucher = index            
         
-    P_erate_brauch = CRNDataList[palumbo_index_braucher].GetErosionRates
-    P_erate_newCRONUS =CRNDataList[palumbo_index_newCRONUS].GetErosionRates 
+    P_erate_brauch = CRNDataList[palumbo_index_braucher].GetErosionRates()
+    #print "Braucher erate palumbo: "
+    #print P_erate_brauch
+    P_erate_newCRONUS =CRNDataList[palumbo_index_newCRONUS].GetErosionRates() 
 
     P_B = np.asarray(P_erate_brauch)
     P_nC = np.asarray(P_erate_newCRONUS) 
     
     P_err = np.divide(  np.subtract(P_nC,P_B),P_B)
     
-    D_erate_brauch = CRNDataList[dethier_index_braucher].GetErosionRates
-    D_erate_newCRONUS =CRNDataList[dethier_index_newCRONUS].GetErosionRates 
+    D_erate_brauch = CRNDataList[dethier_index_braucher].GetErosionRates()
+    D_erate_newCRONUS =CRNDataList[dethier_index_newCRONUS].GetErosionRates() 
 
     D_B = np.asarray(D_erate_brauch)
     D_nC = np.asarray(D_erate_newCRONUS) 
     
-    D_err = np.divide(  np.subtract(D_nC,D_B),D_B)    
+    D_err = np.divide(  np.subtract(D_nC,D_B),D_B)  
+    
+    #print "The palumbo error is: "
+    #print P_err    
+    
+    #print "The dethier error is: "
+    #print D_err
     
             
     #===========================================================================    
@@ -145,6 +146,7 @@ def CollatenewCRONUScomparisonCRNData():
     ax.spines['right'].set_linewidth(1)
     ax.spines['bottom'].set_linewidth(1) 
     ax.tick_params(axis='both', width=1) 
+    ax.set_ylim([0.005,0.015])
  
     plt.xlabel('CAIRN erosion rate g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size)
     plt.ylabel('($E_{newCRONUS}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
@@ -156,11 +158,11 @@ def CollatenewCRONUScomparisonCRNData():
         
     plt.savefig(Dirname+"CAIRNvsnewCRONUSapprox_erate.svg",format = Fileformat)
     
-    #Fig1.show()
+    Fig1.show()
      
-    Fig1.clf()     
+    #Fig1.clf()     
 
 
 
 if __name__ == "__main__":
-    CollateCRNData() 
+     CollatenewCRONUScomparisonCRNData() 
