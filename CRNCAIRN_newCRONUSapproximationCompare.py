@@ -26,8 +26,8 @@ from matplotlib.gridspec import GridSpec
 
 def CollatenewCRONUScomparisonCRNData():
     
-    Directory = "C://basin_data//CosmoPaper//Results//Compiled//Brauch_vs_newCRONUS//"
-    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
+    #Directory = "C://basin_data//CosmoPaper//Results//Compiled//Brauch_vs_newCRONUS//"
+    Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//Brauch_vs_newCRONUS//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     
@@ -89,12 +89,13 @@ def CollatenewCRONUScomparisonCRNData():
 
     # now get the errors
     for index,CRNObj in enumerate( CRNDataList):
-        #print "Looking for scaling and paper names"
-        #print "paper name is: " + PaperNames[index]
-        #print "scaling name is: " +ScalingNames[index]
+        print "Looking for scaling and paper names"
+        print "paper name is: " + PaperNames[index]
+        print "scaling name is: " +ScalingNames[index]
         if "Dethier" in PaperNames[index]:
             if "newCRONUS" in ScalingNames[index]:
                 dethier_index_newCRONUS = index
+                
             else:
                 dethier_index_braucher = index
         elif "Palumbo" in PaperNames[index]:
@@ -105,14 +106,19 @@ def CollatenewCRONUScomparisonCRNData():
                 palumbo_index_braucher = index            
         
     P_erate_brauch = CRNDataList[palumbo_index_braucher].GetErosionRates()
-    #print "Braucher erate palumbo: "
-    #print P_erate_brauch
+    print "Braucher erate palumbo: "
+    print P_erate_brauch
     P_erate_newCRONUS =CRNDataList[palumbo_index_newCRONUS].GetErosionRates() 
-
+    print "newCRONUS erate palumbo: "
+    print P_erate_newCRONUS 
+    P_erate_newCRONUS
+    
     P_B = np.asarray(P_erate_brauch)
     P_nC = np.asarray(P_erate_newCRONUS) 
     
-    P_err = np.divide(  np.subtract(P_nC,P_B),P_B)
+    P_err = np.divide(  np.subtract(P_B,P_nC),P_B)
+    print "P_err: " 
+    print P_err
     
     D_erate_brauch = CRNDataList[dethier_index_braucher].GetErosionRates()
     D_erate_newCRONUS =CRNDataList[dethier_index_newCRONUS].GetErosionRates() 
@@ -120,7 +126,9 @@ def CollatenewCRONUScomparisonCRNData():
     D_B = np.asarray(D_erate_brauch)
     D_nC = np.asarray(D_erate_newCRONUS) 
     
-    D_err = np.divide(  np.subtract(D_nC,D_B),D_B)  
+    D_err = np.divide(  np.subtract(D_B,D_nC),D_B)  
+    print "D_err: " 
+    print D_err     
     
     #print "The palumbo error is: "
     #print P_err    
@@ -146,7 +154,7 @@ def CollatenewCRONUScomparisonCRNData():
     ax.spines['right'].set_linewidth(1)
     ax.spines['bottom'].set_linewidth(1) 
     ax.tick_params(axis='both', width=1) 
-    ax.set_ylim([0.005,0.015])
+    ax.set_ylim([0.02,0.06])
  
     plt.xlabel('CAIRN erosion rate g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size)
     plt.ylabel('($E_{newCRONUS}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)

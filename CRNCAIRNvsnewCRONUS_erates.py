@@ -15,7 +15,8 @@ import numpy as np
 
 def CRNCAIRNvsnewCRONUS_erates():
 
-    Dirname = "C://code//git_papers//crn_basinwide_paper//Compiled_results//"
+    Dirname = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"        
+    #Dirname = "C://code//git_papers//crn_basinwide_paper//Compiled_results//"
     #Fname = "Palumbo*_CompareResults.csv"
     
     SiteNames = []
