@@ -25,7 +25,8 @@ import os
 
 def CRBERCvsReported():
 
-    Dirname = "C://basin_data//CosmoPaper//Results//Compiled//"
+    Dirname = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"   
+    #Dirname = "C://basin_data//CosmoPaper//Results//Compiled//"
     #Fname = "Palumbo*_CompareResults.csv"
     
     SiteNames = []

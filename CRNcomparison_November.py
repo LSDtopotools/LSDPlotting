@@ -19,8 +19,8 @@ from matplotlib.gridspec import GridSpec
 
 def CollateCRNData():
     
-    Directory = "C://basin_data//CosmoPaper//Results//Compiled//"
-    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
+    #Directory = "C://basin_data//CosmoPaper//Results//Compiled//"
+    Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     
@@ -118,7 +118,7 @@ def CollateCRNData():
     
     
     plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
-    plt.ylabel('($E_{CR}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CR2.2}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
@@ -181,8 +181,8 @@ def CollateCRNData():
     #    tick.tick_params(width = 2.5)  
         
         
-    plt.xlabel('$E_{CAIRN}$ g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size)
-    plt.ylabel('($E_{CR}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
+    plt.xlabel('$\epsilon_{CAIRN}$ (g cm$^{-2}$ yr$^{-1}$)', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CR2.2}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
@@ -232,7 +232,7 @@ def CollateCRNData():
         
         
     plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
-    plt.ylabel('($E_{CC}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CC}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
@@ -282,7 +282,7 @@ def CollateCRNData():
         
         
     plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
-    plt.ylabel('($E_{CC-CRONUS}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CC-CR}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 

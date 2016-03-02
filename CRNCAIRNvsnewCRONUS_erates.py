@@ -105,7 +105,7 @@ def CRNCAIRNvsnewCRONUS_erates():
             
             Ce = np.asarray(CAIRN_erate)
             CnC = np.asarray(newCRONUS_erate)
-            Cerr = np.divide( np.subtract(Ce,CnC), Ce)  
+            Cerr = np.divide( np.subtract(CnC,Ce), Ce)  
             
             
             thisdict["CAIRNvsnewCRONUSerr"] = Cerr  
@@ -177,7 +177,7 @@ def CRNCAIRNvsnewCRONUS_erates():
     #ax.set_xscale('log')
             
     plt.xlabel('CAIRN denudation rate (mm/kyr)', fontsize = axis_size)
-    plt.ylabel('($E_{CAIRN}$-$E_{newCRONUS}$)/$E_{CAIRN}$', fontsize = axis_size) 
+    plt.ylabel('($\epsilon_{CREarth}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size) 
     handles, labels = ax.get_legend_handles_labels()    
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
                loc=3, ncol=2, mode="expand", borderaxespad=0.)

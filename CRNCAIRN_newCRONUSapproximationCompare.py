@@ -154,10 +154,10 @@ def CollatenewCRONUScomparisonCRNData():
     ax.spines['right'].set_linewidth(1)
     ax.spines['bottom'].set_linewidth(1) 
     ax.tick_params(axis='both', width=1) 
-    ax.set_ylim([0.02,0.06])
+    #ax.set_ylim([0.02,0.06])
  
-    plt.xlabel('CAIRN erosion rate g cm$^{-2}$ yr$^{-1}$', fontsize = axis_size)
-    plt.ylabel('($E_{newCRONUS}$-$E_{CAIRN}$)/$E_{CAIRN}$', fontsize = axis_size)
+    plt.xlabel('CAIRN denudation rate (g cm$^{-2}$ yr$^{-1}$)', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CREarth}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
