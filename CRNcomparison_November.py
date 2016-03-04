@@ -117,7 +117,7 @@ def CollateCRNData():
  
     
     
-    plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
+    plt.xlabel('Production factor ($S_{tot}$)', fontsize = axis_size)
     plt.ylabel('($\epsilon_{CR2.2}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
@@ -231,7 +231,7 @@ def CollateCRNData():
     #    tick.tick_params(width = 2.5)  
         
         
-    plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
+    plt.xlabel('Production factor ($S_{CCtot}$)', fontsize = axis_size)
     plt.ylabel('($\epsilon_{CC}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
@@ -281,7 +281,7 @@ def CollateCRNData():
     #    tick.tick_params(width = 2.5)  
         
         
-    plt.xlabel('Production factor ($S_{total}$)', fontsize = axis_size)
+    plt.xlabel('Production factor ($S_{CRShield}$*$S_{effp}$)', fontsize = axis_size)
     plt.ylabel('($\epsilon_{CC-CR}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()

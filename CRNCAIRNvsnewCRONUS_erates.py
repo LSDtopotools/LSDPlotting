@@ -176,8 +176,8 @@ def CRNCAIRNvsnewCRONUS_erates():
     #ax.set_yscale('log')
     #ax.set_xscale('log')
             
-    plt.xlabel('CAIRN denudation rate (mm/kyr)', fontsize = axis_size)
-    plt.ylabel('($\epsilon_{CREarth}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size) 
+    plt.xlabel('$\epsilon_{CAIRN}$ (mm/kyr)', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CRCalc}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size) 
     handles, labels = ax.get_legend_handles_labels()    
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
                loc=3, ncol=2, mode="expand", borderaxespad=0.)

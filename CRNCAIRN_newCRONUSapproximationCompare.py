@@ -116,7 +116,7 @@ def CollatenewCRONUScomparisonCRNData():
     P_B = np.asarray(P_erate_brauch)
     P_nC = np.asarray(P_erate_newCRONUS) 
     
-    P_err = np.divide(  np.subtract(P_B,P_nC),P_B)
+    P_err = np.divide(  np.subtract(P_nC,P_B),P_B)
     print "P_err: " 
     print P_err
     
@@ -126,7 +126,7 @@ def CollatenewCRONUScomparisonCRNData():
     D_B = np.asarray(D_erate_brauch)
     D_nC = np.asarray(D_erate_newCRONUS) 
     
-    D_err = np.divide(  np.subtract(D_B,D_nC),D_B)  
+    D_err = np.divide(  np.subtract(D_nC,D_B),D_B)  
     print "D_err: " 
     print D_err     
     
@@ -155,9 +155,10 @@ def CollatenewCRONUScomparisonCRNData():
     ax.spines['bottom'].set_linewidth(1) 
     ax.tick_params(axis='both', width=1) 
     #ax.set_ylim([0.02,0.06])
- 
+    
+    plt.title('We are not using this in the paper!! Use CRNCAIRNvsnewCRONUS_erates.py instead!')
     plt.xlabel('CAIRN denudation rate (g cm$^{-2}$ yr$^{-1}$)', fontsize = axis_size)
-    plt.ylabel('($\epsilon_{CREarth}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CRCalc}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
