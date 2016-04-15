@@ -15,7 +15,8 @@ import numpy as np
 
 def CRBERCvsReported_erates():
 
-    Dirname = "C://basin_data//CosmoPaper//Results//Compiled//"
+    #Dirname = "C://basin_data//CosmoPaper//Results//Compiled//"
+    Dirname = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"   
     #Fname = "Palumbo*_CompareResults.csv"
     
     SiteNames = []
@@ -23,13 +24,13 @@ def CRBERCvsReported_erates():
     PaperNames = []    
     
     # loop through the directory, getting the results from the data    
-    for fname in glob(Dirname+"*_ErateComparison.csv"):
+    for fname in glob(Dirname+"*_ErateComparisonNew.csv"):
         
         # get only the file without the data directory
         NoDirFname = LSDost.GetFileNameNoPath(fname)
         
         # Now get the prefix of the file
-        splitfname = NoDirFname.split('_ErateComparison.csv')
+        splitfname = NoDirFname.split('_ErateComparisonNew.csv')
         fprefix = splitfname[0]
 
         print "File prefix is: " + fprefix 
@@ -57,7 +58,7 @@ def CRBERCvsReported_erates():
         print "I am woking with the dataset: " + fprefix
         
         min_erate = 5
-        max_erate = 100
+        max_erate = 5000
     
         #See if the parameter files exist
         if os.access(fname,os.F_OK):
