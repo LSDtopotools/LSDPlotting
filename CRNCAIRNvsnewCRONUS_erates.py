@@ -21,7 +21,8 @@ def CRNCAIRNvsnewCRONUS_erates():
     
     SiteNames = []
     SiteDicts = []
-    PaperNames = []    
+    PaperNames = []
+    PaperColours = []    
     
     # loop through the directory, getting the results from the data    
     for fname in glob(Dirname+"*_newCRONUSCAIRNComparison.csv"):
@@ -42,19 +43,26 @@ def CRNCAIRNvsnewCRONUS_erates():
         # now get the prefixes
         if fprefix == "Bierman":
             PaperNames.append("Bierman et al., 2005")
+            PaperColours.append("blue")
         elif fprefix == "Dethier":
             PaperNames.append("Dethier et al., 2014")
+            PaperColours.append("red")
         elif fprefix == "Kirchner":
-            PaperNames.append("Kirchner et al., 2001")                
-        elif fprefix == "Munak":
-            PaperNames.append("Munack et al., 2014")            
+            PaperNames.append("Kirchner et al., 2001") 
+            PaperColours.append("yellow")               
+        elif fprefix == "Munack":
+            PaperNames.append("Munack et al., 2014")
+            PaperColours.append("orange")
         #elif fprefix == "Scherler":
         #    PaperNames.append("Scherler et al., 2014")
+        #    PaperColours.append("black")
         #elif fprefix == "Safran":
-        #    PaperNames.append("Safran et al., 2005") 
+        #    PaperNames.append("Safran et al., 2005")
+        #    PaperColours.append("lime")
         elif fprefix == "Palumbo":
-            PaperNames.append("Palumbo et al., 2010")   
-        
+            PaperNames.append("Palumbo et al., 2010")
+            PaperColours.append("thistle")  
+
         print "I am woking with the dataset: " + fprefix
         
         min_erate = 5
@@ -144,18 +152,20 @@ def CRNCAIRNvsnewCRONUS_erates():
     ax = Fig1.add_subplot(gs[10:100,5:75])
 
 
-    cmap = plt.cm.jet   
-    colo = 0 
+    #cmap = plt.cm.jet   
+    #colo = 0 
     
     for index,thisdict in enumerate(SiteDicts):
         
-        colo = colo + (1.000/len(SiteDicts))
+        print "The dataset is: " + PaperNames[index]
+        
+        #colo = colo + (1.000/len(SiteDicts))
         #plt.errorbar(thisdict['CAIRN_erate'], thisdict['newCRONUS_erate'], 
         #             thisdict['CAIRN_uncert'], thisdict['newCRONUS_uncert'], fmt='.',color = cmap(colo), linewidth = 1.5)
         #plt.plot(thisdict['CAIRN_erate'], thisdict['newCRONUS_erate'], "o", markersize=4, 
         #         color=cmap(colo), label = PaperNames[index],markeredgewidth=1.)
         plt.plot(thisdict['CAIRN_erate'], thisdict['CAIRNvsnewCRONUSerr'], "o", markersize=4, 
-                 color=cmap(colo), label = PaperNames[index],markeredgewidth=1.)
+                 color=PaperColours[index], label = PaperNames[index],markeredgewidth=1.)
          
 
     #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )

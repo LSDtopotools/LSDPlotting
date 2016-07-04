@@ -21,7 +21,8 @@ def CRBERCvsReported_erates():
     
     SiteNames = []
     SiteDicts = []
-    PaperNames = []    
+    PaperNames = []  
+    PaperColours = []
     
     # loop through the directory, getting the results from the data    
     for fname in glob(Dirname+"*_ErateComparisonNew.csv"):
@@ -46,7 +47,7 @@ def CRBERCvsReported_erates():
             PaperNames.append("Dethier et al., 2014")
         elif fprefix == "Kirchner":
             PaperNames.append("Kirchner et al., 2001")                
-        elif fprefix == "Munak":
+        elif fprefix == "Munack":
             PaperNames.append("Munack et al., 2014")            
         elif fprefix == "Scherler":
             PaperNames.append("Scherler et al., 2014")
