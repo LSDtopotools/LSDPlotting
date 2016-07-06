@@ -164,8 +164,8 @@ def CRNCAIRNvsnewCRONUS_erates():
         #             thisdict['CAIRN_uncert'], thisdict['newCRONUS_uncert'], fmt='.',color = cmap(colo), linewidth = 1.5)
         #plt.plot(thisdict['CAIRN_erate'], thisdict['newCRONUS_erate'], "o", markersize=4, 
         #         color=cmap(colo), label = PaperNames[index],markeredgewidth=1.)
-        plt.plot(thisdict['CAIRN_erate'], thisdict['CAIRNvsnewCRONUSerr'], "o", markersize=4, 
-                 color=PaperColours[index], label = PaperNames[index],markeredgewidth=1.)
+        plt.plot(thisdict['CAIRN_erate'], thisdict['CAIRNvsnewCRONUSerr'], "o", markersize=5, 
+                 color=PaperColours[index], label = PaperNames[index],markeredgewidth=1.5)
          
 
     #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
