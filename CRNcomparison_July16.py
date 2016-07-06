@@ -58,7 +58,7 @@ def CollateCRNData():
         fprefix = splitfname[0]
         
         # now produce the cronus name from this prefix
-        CRONUS_name = Dirname+fprefix+"_CRONUS.csv"
+        CRONUS_name = Dirname+fprefix+"_CRONUSEmulator.csv"
         
         print "File prefix is: " + fprefix 
         print "Cronus_name is: " + CRONUS_name
@@ -100,11 +100,12 @@ def CollateCRNData():
     #===========================================================================    
     # now make plots based on these data
     # 3.26 inches = 83 mm, the size of a 1 column figure
-    Fig1 = plt.figure(1, facecolor='white',figsize=(3.26,3.26))  
+    Fig1 = plt.figure(1, facecolor='white',figsize=(3.26,6.25))  
 
     # generate a 120,90 grid. 
-    gs = GridSpec(100,75,bottom=0.13,left=0.13,right=0.98,top=0.85) 
-    ax = Fig1.add_subplot(gs[10:100,5:75])
+    # gendepth a grid. 
+    gs = GridSpec(100,100,bottom=0.06,left=0.1,right=1.0,top=1.0) 
+    ax = Fig1.add_subplot(gs[2:41,10:95])  
     
     # this gets the colors to map to specific sites
     #cmap = plt.cm.jet    
@@ -121,40 +122,17 @@ def CollateCRNData():
     ax.spines['right'].set_linewidth(1)
     ax.spines['bottom'].set_linewidth(1) 
     ax.tick_params(axis='both', width=1) 
-    
- 
-    
-    
+       
     plt.xlabel('Production factor ($S_{tot}$)', fontsize = axis_size)
     plt.ylabel('($\epsilon_{CR2.2}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
-    handles, labels = ax.get_legend_handles_labels()
-    plt.legend()
-    plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
-               loc=3, ncol=2, mode="expand", borderaxespad=0.)
-        
-    plt.savefig(Dirname+"Production_vs_error.svg",format = Fileformat)
-    
-    #Fig1.show()
-     
-    Fig1.clf()     
-
-
-
-    # These don't work in my version of matplotlib...I must update (!)
-    # have found a workaround below    
-    #plt.rcParams['xtick.major.linewidth'] = 4
-    #plt.rcParams['xtick.minor.width'] = 2
- 
-
-    #===========================================================================   
-    # now make plots based on these data
-    # 3.26 inches = 83 mm, the size of a 1 column figure
-    Fig2 = plt.figure(1, facecolor='white',figsize=(3.26,3.5))  
+    #handles, labels = ax.get_legend_handles_labels()
+    #plt.legend()
+    #plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
+    #           loc=3, ncol=2, mode="expand", borderaxespad=0.)
 
     # generate a 120,90 grid. 
-    gs = GridSpec(100,75,bottom=0.14,left=0.13,right=0.98,top=0.85) 
-    ax = Fig2.add_subplot(gs[10:100,5:75])
+    ax2 = Fig1.add_subplot(gs[58:97,10:95])    
 
     plt.rcParams['xtick.major.size'] = 4    
     plt.rcParams['xtick.minor.size'] = 3
@@ -166,23 +144,23 @@ def CollateCRNData():
 
     for index,CRNObj in enumerate( CRNDataList):
         #colo = colo + (1.000/len(CRNprefixes))
-        ax.plot(CRNObj.GetErosionRates(),CRNObj.GetError_CR(), "o", markersize=4, 
-                color=PaperColours[index], label = PaperNames[index],markeredgewidth=1)
+        ax2.plot(CRNObj.GetErosionRates(),CRNObj.GetError_CR(), "o", markersize=4, 
+                color=PaperColours[index], label = PaperNames[index], markeredgewidth=1)
 
-    ax.spines['top'].set_linewidth(1)
-    ax.spines['left'].set_linewidth(1)
-    ax.spines['right'].set_linewidth(1)
-    ax.spines['bottom'].set_linewidth(1) 
+    ax2.spines['top'].set_linewidth(1)
+    ax2.spines['left'].set_linewidth(1)
+    ax2.spines['right'].set_linewidth(1)
+    ax2.spines['bottom'].set_linewidth(1) 
     #ax.tick_params(axis='both', width=2.5)
-    ax.set_xscale('log') 
+    ax2.set_xscale('log') 
     
     # This gets all the ticks, and pads them away from the axis so that the corners don't overlap
     # the which command tells the program to get major and minor ticks 
-    ax.tick_params(axis='both', width=1, pad = 1, which = 'both')
-    for tick in ax.xaxis.get_major_ticks():
+    ax2.tick_params(axis='both', width=1, pad = 1, which = 'both')
+    for tick in ax2.xaxis.get_major_ticks():
         tick.set_pad(3)   
 
-    for tick in ax.yaxis.get_major_ticks():
+    for tick in ax2.yaxis.get_major_ticks():
         tick.set_pad(3)  
 
     #for tick in ax.xaxis.get_minor_ticks():
@@ -197,16 +175,30 @@ def CollateCRNData():
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
                loc=3, ncol=2, mode="expand", borderaxespad=0.)    
     #plt.show()    
-    plt.savefig(Dirname+"Erosion_vs_error.svg",format = Fileformat)    
-    Fig2.clf()    
-        
+    plt.savefig(Dirname+"Production_and_erosion_vs_error.svg",format = Fileformat)  
+    
+    Fig1.clf()    
+
+
+
+
+
+
+
+
+
+
+
+
+ #=========================================================================== 
+ #===========================================================================         
     #===========================================================================   
     # now make plots based on these data
-    Fig3 = plt.figure(1, facecolor='white',figsize=(3.26,3.5))  
+    Fig3 = plt.figure(1, facecolor='white',figsize=(3.26,6.25))  
 
     # generate a 120,90 grid. 
-    gs = GridSpec(100,75,bottom=0.14,left=0.14,right=0.97,top=0.85) 
-    ax = Fig3.add_subplot(gs[10:100,5:75])
+    gs = GridSpec(100,100,bottom=0.06,left=0.1,right=1.0,top=1.0) 
+    ax3 = Fig3.add_subplot(gs[2:41,10:95])  
 
     plt.rcParams['xtick.major.size'] = 4    
     plt.rcParams['ytick.major.size'] = 4
@@ -217,22 +209,22 @@ def CollateCRNData():
 
     for index,CRNObj in enumerate( CRNDataList):
         #colo = colo + (1.000/len(CRNprefixes))
-        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CC(), "o",
+        ax3.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CC(), "o",
                 markersize=4, color=PaperColours[index], label = PaperNames[index],markeredgewidth=1)
 
-    ax.spines['top'].set_linewidth(1)
-    ax.spines['left'].set_linewidth(1)
-    ax.spines['right'].set_linewidth(1)
-    ax.spines['bottom'].set_linewidth(1) 
+    ax3.spines['top'].set_linewidth(1)
+    ax3.spines['left'].set_linewidth(1)
+    ax3.spines['right'].set_linewidth(1)
+    ax3.spines['bottom'].set_linewidth(1) 
     #ax.tick_params(axis='both', width=2.5)
     
     # This gets all the ticks, and pads them away from the axis so that the corners don't overlap
     # the which command tells the program to get major and minor ticks 
-    ax.tick_params(axis='both', width=1, pad = 1, which = 'both')
-    for tick in ax.xaxis.get_major_ticks():
+    ax3.tick_params(axis='both', width=1, pad = 1, which = 'both')
+    for tick in ax3.xaxis.get_major_ticks():
         tick.set_pad(3)   
 
-    for tick in ax.yaxis.get_major_ticks():
+    for tick in ax3.yaxis.get_major_ticks():
         tick.set_pad(3)  
 
     #for tick in ax.xaxis.get_minor_ticks():
@@ -242,47 +234,37 @@ def CollateCRNData():
     plt.xlabel('Production factor ($S_{CCtot}$)', fontsize = axis_size)
     plt.ylabel('($\epsilon_{CC}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
-    handles, labels = ax.get_legend_handles_labels()
-    plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
-               loc=3, ncol=2, mode="expand", borderaxespad=0.)    
+    #handles, labels = ax.get_legend_handles_labels()
+    #plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
+    #           loc=3, ncol=2, mode="expand", borderaxespad=0.)    
         
-    #plt.show()    
-    plt.savefig(Dirname+"COSMOCALC_vs_error.svg",format = Fileformat)        
-    Fig3.clf() 
-
-        
-    #===========================================================================   
-    # now make plots based on these data
-    Fig4 = plt.figure(1, facecolor='white',figsize=(3.26,3.5))  
-
-    # generate a 120,90 grid. 
-    gs = GridSpec(100,75,bottom=0.14,left=0.14,right=0.97,top=0.85) 
-    ax = Fig4.add_subplot(gs[10:100,5:75])
-
     plt.rcParams['xtick.major.size'] = 4   
     
     # this gets the colors to map to specific sites
     #cmap = plt.cm.jet    
     #colo = 0       
 
+
+    ax4 = Fig1.add_subplot(gs[58:97,10:95])   
+
     for index,CRNObj in enumerate( CRNDataList):
         #colo = colo + (1.000/len(CRNprefixes))
-        ax.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CR_em(), "o",
+        ax4.plot(CRNObj.GetAverageCombinedScaling(),CRNObj.GetError_CR_em(), "o",
                 markersize=4, color=PaperColours[index], label = PaperNames[index],markeredgewidth=1)
 
-    ax.spines['top'].set_linewidth(1)
-    ax.spines['left'].set_linewidth(1)
-    ax.spines['right'].set_linewidth(1)
-    ax.spines['bottom'].set_linewidth(1) 
+    ax4.spines['top'].set_linewidth(1)
+    ax4.spines['left'].set_linewidth(1)
+    ax4.spines['right'].set_linewidth(1)
+    ax4.spines['bottom'].set_linewidth(1) 
     #ax.tick_params(axis='both', width=2.5)
     
     # This gets all the ticks, and pads them away from the axis so that the corners don't overlap
     # the which command tells the program to get major and minor ticks 
-    ax.tick_params(axis='both', width=1, pad = 1, which = 'both')
-    for tick in ax.xaxis.get_major_ticks():
+    ax4.tick_params(axis='both', width=1, pad = 1, which = 'both')
+    for tick in ax4.xaxis.get_major_ticks():
         tick.set_pad(3)   
 
-    for tick in ax.yaxis.get_major_ticks():
+    for tick in ax4.yaxis.get_major_ticks():
         tick.set_pad(3)  
 
     #for tick in ax.xaxis.get_minor_ticks():
@@ -292,13 +274,13 @@ def CollateCRNData():
     plt.xlabel('Production factor ($S_{CRShield}$*$S_{effp}$)', fontsize = axis_size)
     plt.ylabel('($\epsilon_{CC-CR}$-$\epsilon_{CAIRN}$)/$\epsilon_{CAIRN}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
-    handles, labels = ax.get_legend_handles_labels()
+    handles, labels = ax4.get_legend_handles_labels()
     plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
                loc=3, ncol=2, mode="expand", borderaxespad=0.)    
         
     #plt.show()    
-    plt.savefig(Dirname+"COSMOCALC_CRem_vs_error.svg",format = Fileformat)           
-    Fig4.clf()         
+    plt.savefig(Dirname+"COSMOCALC_and_spatial_differences.svg",format = Fileformat)           
+    Fig3.clf()         
 
 if __name__ == "__main__":
     CollateCRNData() 
