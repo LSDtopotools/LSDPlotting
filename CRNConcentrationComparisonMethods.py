@@ -56,8 +56,8 @@ def get_concentration_data(Directory):
 
 def plot_production_rates():
 
-    Directory = "C://basin_data//CosmoPaper//Results//"
-    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
+    #Directory = "C://basin_data//CosmoPaper//Results//"
+    Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     

@@ -56,7 +56,7 @@ def CRBERCvsReported():
             PaperColours.append("blue")
         elif fprefix == "Dethier":
             PaperNames.append("Dethier et al., 2014")
-            PaperColours.append("red")
+            PaperColours.append("lawngreen")
         elif fprefix == "Kirchner":
             PaperNames.append("Kirchner et al., 2001") 
             PaperColours.append("yellow")               
@@ -68,10 +68,10 @@ def CRBERCvsReported():
             PaperColours.append("black")
         elif fprefix == "Safran":
             PaperNames.append("Safran et al., 2005")
-            PaperColours.append("lime")
+            PaperColours.append("powderblue")
         elif fprefix == "Palumbo":
             PaperNames.append("Palumbo et al., 2010")
-            PaperColours.append("thistle")  
+            PaperColours.append("maroon")  
     
         #See if the parameter files exist
         if os.access(fname,os.F_OK):
