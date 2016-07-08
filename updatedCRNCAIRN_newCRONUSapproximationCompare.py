@@ -26,8 +26,8 @@ from matplotlib.gridspec import GridSpec
 
 def CollatenewCRONUScomparisonCRNData():
     
-    Directory = "C://code//git_papers//crn_basinwide_paper//Compiled_results//Brauch_vs_newCRONUS//"
-    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//Brauch_vs_newCRONUS//"
+    #Directory = "C://code//git_papers//crn_basinwide_paper//Compiled_results//Brauch_vs_newCRONUS//"
+    Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//Brauch_vs_newCRONUS//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     
@@ -71,20 +71,20 @@ def CollatenewCRONUScomparisonCRNData():
         # now get the prefixes
         if "Dethier" in fprefix:
             if "newCRONUS" in fprefix:
-                D_erate_newCRONUS = thisCRNData.GetErosionRates() 
+                D_erate_newCRONUS = thisCRNData.GetErosionRates_mmperkyr_rho2650() 
         elif "Palumbo" in fprefix:
             if "newCRONUS" in fprefix:
-                P_erate_newCRONUS = thisCRNData.GetErosionRates() 
+                P_erate_newCRONUS = thisCRNData.GetErosionRates_mmperkyr_rho2650() 
             
     # Convert the data to arrays (to calculate errors)
     P_nC_CAIRN = np.asarray(P_erate_newCRONUS) 
     D_nC_CAIRN = np.asarray(D_erate_newCRONUS) 
     
-    print "P CAIRN is: "
-    print P_nC_CAIRN
+    #print "P CAIRN is: "
+    #print P_nC_CAIRN
 
-    print "D CAIRN is: "
-    print D_nC_CAIRN    
+    #print "D CAIRN is: "
+    #print D_nC_CAIRN    
 
     # Now get the CRONUScalc data  
     print "Entering second glob loop"
@@ -150,16 +150,23 @@ def CollatenewCRONUScomparisonCRNData():
         elif fprefix == "Palumbo":
             P_newCRONUS = newCRONUS_erate
 
-    print "P_newCRONUS is: "
-    print  P_newCRONUS
-    print "D_newCRONUS is: "
-    print  D_newCRONUS
+    #print "P_newCRONUS is: "
+    #print  P_newCRONUS
+    #print "D_newCRONUS is: "
+    #print  D_newCRONUS
 
     P_nC = np.asarray(P_newCRONUS)
     D_nC = np.asarray(D_newCRONUS) 
     
     Perr = np.divide( np.subtract(P_nC_CAIRN,P_nC), P_nC)  
     Derr = np.divide( np.subtract(D_nC_CAIRN,D_nC), D_nC)  
+    
+    print "The errors are: "
+    print Perr
+    print Derr
+    
+    print P_nC
+    print P_nC_CAIRN
 
     # okay, now you should have the errors    
             
@@ -169,11 +176,11 @@ def CollatenewCRONUScomparisonCRNData():
     Fig1 = plt.figure(1, facecolor='white',figsize=(3.26,3.26))  
 
     # generate a 120,90 grid. 
-    gs = GridSpec(100,75,bottom=0.13,left=0.13,right=0.98,top=0.85) 
-    ax = Fig1.add_subplot(gs[10:100,5:75])   
+    gs = GridSpec(100,75,bottom=0.13,left=0.13,right=0.95,top=0.95) 
+    ax = Fig1.add_subplot(gs[10:100,5:95])   
     
-    ax.plot(P_nC,Perr,"o",markersize=4, color = "magenta", label = "Palumbo et al., 2010",markeredgewidth=1)
-    ax.plot(D_nC,Derr,"ro",markersize=4, label = "Dethier et al., 2014",markeredgewidth=1)
+    ax.plot(P_nC,Perr,"o",markersize=5, color = "maroon", label = "Palumbo et al., 2010",markeredgewidth=1)
+    ax.plot(D_nC,Derr,"ro",markersize=5, color = "lawngreen", label = "Dethier et al., 2014",markeredgewidth=1)
 
     ax.spines['top'].set_linewidth(1)
     ax.spines['left'].set_linewidth(1)
@@ -183,20 +190,17 @@ def CollatenewCRONUScomparisonCRNData():
     #ax.set_ylim([0.02,0.06])
     
     #plt.title('We are not using this in the paper!! Use CRNCAIRNvsnewCRONUS_erates.py instead!')
-    plt.xlabel('CRONUScalc denudation rate (g cm$^{-2}$ yr$^{-1}$)', fontsize = axis_size)
-    plt.ylabel('($\epsilon_{CAIRN-CRCalc}$-$\epsilon_{CRCalc}$)/$\epsilon_{CRCalc}}$', fontsize = axis_size)
+    plt.xlabel('$\epsilon_{CRCalc}$ (g cm$^{-2}$ yr$^{-1}$)', fontsize = axis_size)
+    plt.ylabel('($\epsilon_{CAIRN-CRCalc}$-$\epsilon_{CRCalc}$)/$\epsilon_{CRCalc}$', fontsize = axis_size)
     #plt.title('Cosmocalc / New_code',fontsize = label_size+6)
     handles, labels = ax.get_legend_handles_labels()
     plt.legend()
-    plt.legend(handles, labels, numpoints = 1, bbox_to_anchor=(0., 1.02, 1., .102), 
-               loc=3, ncol=2, mode="expand", borderaxespad=0.)
+    plt.legend(handles, labels, numpoints = 1, 
+               loc=4, ncol=1, borderaxespad=1.)
         
     plt.savefig(Dirname+"CAIRN_newCRONUS_emulator.svg",format = Fileformat)
     
-    Fig1.show()
-     
-    #Fig1.clf()     
-
+    #Fig1.show()
 
 
 if __name__ == "__main__":

@@ -610,6 +610,13 @@ class CRNResults(object):
             print ERate
         return ERate
 
+    def GetErosionRates_mmperkyr_rho2650(self,PrintToScreen = False):
+        ERate = self.CRNData['erate_mmperkyr_rho2650']
+        
+        if PrintToScreen:
+            print ERate
+        return ERate
+
     def GetErosionRatesUncert(self,PrintToScreen = False):
         ERateU = self.CRNData['total_uncert']
         
