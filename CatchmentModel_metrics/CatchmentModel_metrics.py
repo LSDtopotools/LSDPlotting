@@ -22,18 +22,14 @@ from matplotlib import rcParams
 
 # VARIABLES
 data_dir = "/home/dav/HDD/DATA/VIRTUALBOX_SHARED/HydrogeomorphPaper\
-/BOSCASTLE/PaperSimulations/Lumped/Hybrid"
-data_dir_rain = "/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
-data_dir2="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
-input_raster1 = "elev.txt"
-input_raster2 = "elevdiff.txt"
+/BOSCASTLE/PaperSimulations/Radar1km/DetachLim"
+#data_dir="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
+input_raster2 = "elev.txt"
+input_raster1 = "elevdiff.txt"
 #input_raster2 = "rainfall_totals_boscastle_downscaled.asc"
 
 # A text file with x, y scatter values, in case of future use
-outpt_datafile_name = "precip_vs_erosion.txt"
-output_figure_dir = "/mnt/WORK/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/Uniform"
-output_figure_name = "elev_vs_erosion"
-output_figure_format = "png"
+outpt_datafile_name = "elev_vs_erosion.txt"
 
 # Plotting parameters
 rcParams['font.family'] = 'sans-serif'
@@ -41,10 +37,9 @@ rcParams['font.sans-serif'] = ['arial']
 rcParams['font.size'] = 16
 
 
-def create_data_arrays(data_dir, input_raster1, input_raster2, data_dir2=data_dir):
+def create_data_arrays(data_dir, input_raster1, input_raster2):
     load_data1 = data_dir + "/" + input_raster1
-    load_data2 = data_dir2 + "/" + input_raster2
-    print input_raster2, data_dir2, load_data2
+    load_data2 = data_dir + "/" + input_raster2
     data_raster1 = np.loadtxt(load_data1, skiprows=6)
     data_raster2 = np.loadtxt(load_data2, skiprows=6)
     
@@ -54,16 +49,13 @@ def create_data_arrays(data_dir, input_raster1, input_raster2, data_dir2=data_di
 def plot_scatter_rasterdata(data_array1, data_array2):
     plt.scatter(data_array1, data_array2, marker="x")
     plt.xlim(0,300)
-    #plt.ylim(0,300)
-    plt.ylabel("Elevation Difference (m)")
+    #plt.ylim(0,1400)
     plt.xlabel("Elevation (m)")
-    #plt.show()
-    
-    full_path_plus_name = output_figure_dir+"/"+output_figure_name+"."+output_figure_format
-    plt.savefig(full_path_plus_name, format=output_figure_format)
+    plt.ylabel("Elevation difference (mm)")
+    plt.show()
     
 # Run the script 
-elev, total_precip = create_data_arrays(data_dir, input_raster1, input_raster2)
+elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
 plot_scatter_rasterdata(elev, total_precip)
 
 
