@@ -31,7 +31,8 @@ def CRBERCvsReported():
     
     SiteNames = []
     SiteDicts = []   
-    PaperNames = []      
+    PaperNames = []  
+    PaperColours = []    
     
     # loop through the directory, getting the results from the data    
     for fname in glob(Dirname+"*_CompareResults.csv"):
@@ -52,18 +53,25 @@ def CRBERCvsReported():
         # now get the prefixes
         if fprefix == "Bierman":
             PaperNames.append("Bierman et al., 2005")
+            PaperColours.append("blue")
         elif fprefix == "Dethier":
             PaperNames.append("Dethier et al., 2014")
+            PaperColours.append("lawngreen")
         elif fprefix == "Kirchner":
-            PaperNames.append("Kirchner et al., 2001")                
-        elif fprefix == "Munak":
-            PaperNames.append("Munack et al., 2014")            
+            PaperNames.append("Kirchner et al., 2001") 
+            PaperColours.append("yellow")               
+        elif fprefix == "Munack":
+            PaperNames.append("Munack et al., 2014")
+            PaperColours.append("orange")
         elif fprefix == "Scherler":
             PaperNames.append("Scherler et al., 2014")
+            PaperColours.append("black")
         elif fprefix == "Safran":
-            PaperNames.append("Safran et al., 2005") 
+            PaperNames.append("Safran et al., 2005")
+            PaperColours.append("powderblue")
         elif fprefix == "Palumbo":
-            PaperNames.append("Palumbo et al., 2010")   
+            PaperNames.append("Palumbo et al., 2010")
+            PaperColours.append("maroon")  
     
         #See if the parameter files exist
         if os.access(fname,os.F_OK):
@@ -122,14 +130,14 @@ def CRBERCvsReported():
     ax = Fig1.add_subplot(gs[10:100,5:75]) 
 
    
-    cmap = plt.cm.jet   
-    colo = 0    
+    #cmap = plt.cm.jet   
+    #colo = 0    
     
     for index,thisdict in enumerate(SiteDicts):
         
-        colo = colo + (1.000/len(SiteDicts))
+        #colo = colo + (1.000/len(SiteDicts))
         plt.plot(thisdict['BERC_shield'], thisdict['Report_shield'], "o", 
-                 markersize=4, color=cmap(colo), label = PaperNames[index],markeredgewidth = 1)
+                 markersize=4, color=PaperColours[index], label = PaperNames[index],markeredgewidth = 1)
 
 
     #plt.plot(self.CRNData['AvgProdScaling'],self.CRNData['Error_CR'],color=cmap(self.CRNData['basin_relief']),"o", markersize=8     )
