@@ -479,7 +479,7 @@ def BasicDensityPlotGridPlot(FileName, thiscmap='gray',colorbarlabel='Elevation 
 #==============================================================================
 
 #==============================================================================
-def BasicDrapedPlotGridPlot(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
+def BasicDrapedPlotGridPlot(FileName, DrapeName, thiscmap='gray',drape_cmap='jet',
                             colorbarlabel='Elevation in meters',clim_val = (0,0),
                             drape_alpha = 0.6,FigFileName = 'Image.pdf',FigFormat = 'show'):
     
