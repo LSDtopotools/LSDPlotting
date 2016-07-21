@@ -607,6 +607,11 @@ def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
     import matplotlib.pyplot as plt
     import matplotlib.lines as mpllines
     from mpl_toolkits.axes_grid1 import AxesGrid
+    
+    if DrapeName==None and DrapeArray==None:
+      raise ValueError('You need to either supply a filename for the drape , or \
+      an array to drape. You cannot leave both unspecified. Use either \
+      "DrapeName=" or "DrapeArray="')
 
     label_size = 20
     #title_size = 30
@@ -619,7 +624,19 @@ def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
 
     hillshade = Hillshade(FileName) 
     #hillshade = LSDMap_IO.ReadRasterArrayBlocks(DrapeName)
-    raster_drape = LSDMap_IO.ReadRasterArrayBlocks(DrapeName)
+    
+    # DAV - option to supply array directly (after masking for example, rather
+    # than reading directly from a file. Should not break anyone's code)
+    # (You can't overload functions in Python...)
+    if isinstance(DrapeName, str):
+      raster_drape = LSDMap_IO.ReadRasterArrayBlocks(DrapeName)
+    elif isinstance(DrapeName, np.ndarray):
+      raster_drape = DrapeArray
+    else:
+      print "DrapeName supplied is of type: ", type(DrapeName)
+      raise ValueError('DrapeName must either be a string to a filename, \
+      or a numpy ndarray type. Please try again.')
+    
     
     # now get the extent
     extent_raster = LSDMap_IO.GetRasterExtent(FileName)

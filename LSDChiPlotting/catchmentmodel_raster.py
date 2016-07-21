@@ -23,6 +23,4 @@ laptop_folder = ""
 filename = "boscastle5m_bedrock_fill.asc"
 drapename = "elevdiff4320.txt"
 
-lsdplt.DrapedOverHillshade(folder + filename, folder + drapename)
-
- 
+lsdplt.DrapedOverHillshade(folder + filename, folder + drapename, clim_val=(2,6), drape_cmap='jet')
