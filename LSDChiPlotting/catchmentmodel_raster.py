@@ -13,6 +13,8 @@ or d50 size, etc.
 """
 
 import LSDPlottingTools as lsdplt
+import LSDPlottingTools.LSDMap_GDALIO as mapio # fun trivia: this is Welsh for 'mapping'.
+import numpy as np
 
 
 """Plots a hillshade overlain with the erossion or deposition amount"""
@@ -21,6 +23,12 @@ folder = "/mnt/DATA/DATA/VIRTUALBOX_SHARED/HydrogeomorphPaper/BOSCASTLE/PaperSim
 laptop_folder = ""
 
 filename = "boscastle5m_bedrock_fill.asc"
-drapename = "elevdiff4320.txt"
+drapename = "waterdepth2400.txt"
 
-lsdplt.DrapedOverHillshade(folder + filename, folder + drapename, clim_val=(2,6), drape_cmap='jet')
+drape_array = mapio.ReadRasterArrayBlocks(folder + drapename)
+low_values_index = drape_array < 0.05
+drape_array[low_values_index] = np.nan
+
+lsdplt.DrapedOverHillshade(folder + filename, drape_array, clim_val=(0,400), \
+drape_cmap='jet', colorbarlabel='Elevation in meters'\
+,ShowColorbar=True)

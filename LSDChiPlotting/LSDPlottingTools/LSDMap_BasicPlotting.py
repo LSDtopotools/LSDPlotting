@@ -607,11 +607,6 @@ def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
     import matplotlib.pyplot as plt
     import matplotlib.lines as mpllines
     from mpl_toolkits.axes_grid1 import AxesGrid
-    
-    if DrapeName==None and DrapeArray==None:
-      raise ValueError('You need to either supply a filename for the drape , or \
-      an array to drape. You cannot leave both unspecified. Use either \
-      "DrapeName=" or "DrapeArray="')
 
     label_size = 20
     #title_size = 30
@@ -631,7 +626,7 @@ def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
     if isinstance(DrapeName, str):
       raster_drape = LSDMap_IO.ReadRasterArrayBlocks(DrapeName)
     elif isinstance(DrapeName, np.ndarray):
-      raster_drape = DrapeArray
+      raster_drape = DrapeName
     else:
       print "DrapeName supplied is of type: ", type(DrapeName)
       raise ValueError('DrapeName must either be a string to a filename, \
@@ -719,9 +714,13 @@ def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
 
 #==============================================================================
 # Make a simple hillshade plot
-def Hillshade(raster_file, azimuth = 315, angle_altitude = 45): 
+def Hillshade(raster_file, azimuth = 315, angle_altitude = 45, NoDataVal = -9999.0): 
     
     array = LSDMap_IO.ReadRasterArrayBlocks(raster_file,raster_band=1)    
+    
+    # Addition DAV to cope with rasters that are not rectangles (e.g. clipped basins)
+    nodata = NoDataVal
+    array[array==nodata] = np.nan #Set nodatas to NaN   
     
     x, y = np.gradient(array)
     slope = np.pi/2. - np.arctan(np.sqrt(x*x + y*y))
