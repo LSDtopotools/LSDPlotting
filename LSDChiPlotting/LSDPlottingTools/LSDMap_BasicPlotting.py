@@ -602,11 +602,12 @@ def BasicDrapedPlotGridPlot(FileName, DrapeName, thiscmap='gray',drape_cmap='gra
 #==============================================================================
 def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
                             colorbarlabel='Elevation in meters',clim_val = (0,0),
-                            drape_alpha = 0.6, ShowColorbar = False):
+                            drape_alpha = 0.6, ShowColorbar = False, 
+                            ShowDrapeColorbar=False, drape_cbarlabel=None):
     
     import matplotlib.pyplot as plt
     import matplotlib.lines as mpllines
-    from mpl_toolkits.axes_grid1 import AxesGrid
+    from mpl_toolkits.axes_grid1 import AxesGrid, make_axes_locatable
 
     label_size = 20
     #title_size = 30
@@ -655,6 +656,12 @@ def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
                         cbar_size="7%",
                         cbar_pad="2%",
                         )
+                        
+    #ShowDrapeColorbar = True                    
+    #if ShowDrapeColorbar and ShowColorbar:
+      #divider = make_axes_locatable(fig)
+      #cax = divider.append_axes("right", size = "5%", pad=0.05)
+      
     else:
         grid = AxesGrid(fig, 111, 
                         nrows_ncols=(1, 1),
@@ -691,9 +698,13 @@ def DrapedOverHillshade(FileName, DrapeName, thiscmap='gray',drape_cmap='gray',
         im.set_clim(clim_val[0],clim_val[1])
     
     # Now for the drape: it is in grayscape
-    im = grid[0].imshow(raster_drape[::-1], drape_cmap, extent = extent_raster, alpha = drape_alpha, interpolation="nearest")
+    im2 = grid[0].imshow(raster_drape[::-1], drape_cmap, extent = extent_raster, alpha = drape_alpha, interpolation="nearest")
       
-    
+    if ShowDrapeColorbar:
+      cbar2 = grid.cbar_axes[0].colorbar(im2)
+      cbar2.set_label_text(drape_cbarlabel)
+      
+      #plt.colorbar(im)
 
     # This affects all axes because we set share_all = True.
     grid.axes_llc.set_xlim(x_min,x_max)    
