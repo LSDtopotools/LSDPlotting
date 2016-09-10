@@ -21,8 +21,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 
 # VARIABLES
-data_dir = "/home/dav/HDD/DATA/VIRTUALBOX_SHARED/HydrogeomorphPaper\
-/BOSCASTLE/PaperSimulations/Radar1km/DetachLim"
+data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
 #data_dir="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
 input_raster2 = "elev.txt"
 input_raster1 = "elevdiff.txt"
@@ -30,6 +29,8 @@ input_raster1 = "elevdiff.txt"
 
 # A text file with x, y scatter values, in case of future use
 outpt_datafile_name = "elev_vs_erosion.txt"
+
+timeseries = "boscastle_lumped_detachlim.dat"
 
 # Plotting parameters
 rcParams['font.family'] = 'sans-serif'
@@ -54,11 +55,18 @@ def plot_scatter_rasterdata(data_array1, data_array2):
     plt.ylabel("Elevation difference (mm)")
     plt.show()
     
+def plot_hydrograph(data_dir,timeseries):
+    filename = data_dir + timeseries
+    time_step, q_topmodel, q_lisflood = np.loadtxt(filename, usecols=(0,1,2), unpack=True)
+    
+    plt.plot(time_step, q_lisflood)
+    
+    
 # Run the script 
-elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
-plot_scatter_rasterdata(elev, total_precip)
+#elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
+#plot_scatter_rasterdata(elev, total_precip)
 
-
+plot_hydrograph(data_dir,timeseries)
 
 
 
