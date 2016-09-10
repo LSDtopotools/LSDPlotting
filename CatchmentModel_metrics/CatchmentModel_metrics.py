@@ -22,6 +22,10 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 
 
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+
+
 # VARIABLES
 data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
 #data_dir="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
@@ -58,20 +62,28 @@ def plot_scatter_rasterdata(data_array1, data_array2):
     plt.ylabel("Elevation difference (mm)")
     plt.show()
     
-def plot_hydrograph(data_dir,timeseries):
+def plot_hydrograph(data_dir,timeseries,axes):
+        
     filename = data_dir + timeseries
     time_step, q_lisflood, q_topmodel, sed_tot = np.loadtxt(filename, usecols=(0,1,2,4), unpack=True)
     
-    plt.plot(time_step, q_lisflood)
-    plt.xlim(450,600)
-    #plt.plot(time_step, q_topmodel)
+    axes.plot(time_step, q_lisflood)
+    axes.set_xlim(450,600)
+    #plt.plot(time_step, q_topmodel)    
+    #plot_inset(axes, time_step, q_lisflood)
     
 def plot_ensemble_hydrograph(data_dir, wildcard_fname):
+    fig, ax = plt.subplots()
     # Loop through the files in a dir and plot them all on the same axes
     for f in glob.glob(data_dir + wildcard_fname):
         current_timeseries = os.path.basename(f)
         print current_timeseries
-        plot_hydrograph(data_dir, current_timeseries)
+        plot_hydrograph(data_dir, current_timeseries, ax)
+        
+def plot_inset(parent_axes, x_data, y_data):
+    ax_inset = zoomed_inset_axes(parent_axes, 1, loc=1)
+    ax_inset.plot(x_data, y_data)
+
     
     
 # Run the script 
