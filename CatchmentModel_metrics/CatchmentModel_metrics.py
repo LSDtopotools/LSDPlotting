@@ -15,10 +15,12 @@ averages also under construction.
 
 @author: dav
 """
-
+import glob
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+
 
 # VARIABLES
 data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
@@ -31,6 +33,7 @@ input_raster1 = "elevdiff.txt"
 outpt_datafile_name = "elev_vs_erosion.txt"
 
 timeseries = "boscastle_lumped_detachlim.dat"
+wildcard_fname = "boscastle*.dat"
 
 # Plotting parameters
 rcParams['font.family'] = 'sans-serif'
@@ -57,18 +60,27 @@ def plot_scatter_rasterdata(data_array1, data_array2):
     
 def plot_hydrograph(data_dir,timeseries):
     filename = data_dir + timeseries
-    time_step, q_topmodel, q_lisflood = np.loadtxt(filename, usecols=(0,1,2), unpack=True)
+    time_step, q_lisflood, q_topmodel, sed_tot = np.loadtxt(filename, usecols=(0,1,2,4), unpack=True)
     
     plt.plot(time_step, q_lisflood)
+    plt.xlim(450,600)
+    #plt.plot(time_step, q_topmodel)
+    
+def plot_ensemble_hydrograph(data_dir, wildcard_fname):
+    # Loop through the files in a dir and plot them all on the same axes
+    for f in glob.glob(data_dir + wildcard_fname):
+        current_timeseries = os.path.basename(f)
+        print current_timeseries
+        plot_hydrograph(data_dir, current_timeseries)
     
     
 # Run the script 
 #elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
 #plot_scatter_rasterdata(elev, total_precip)
 
-plot_hydrograph(data_dir,timeseries)
+#plot_hydrograph(data_dir,timeseries)
 
-
+plot_ensemble_hydrograph(data_dir, wildcard_fname)
 
 
 
