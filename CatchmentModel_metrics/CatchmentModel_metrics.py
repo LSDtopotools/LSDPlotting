@@ -37,7 +37,7 @@ input_raster1 = "elevdiff.txt"
 # A text file with x, y scatter values, in case of future use
 outpt_datafile_name = "elev_vs_erosion.txt"
 
-timeseries = "boscastle_lumped_detachlim.dat"
+fname = "boscastle_lumped_detachlim.dat"
 wildcard_fname = "boscastle*.dat"
 
 # Plotting parameters
@@ -63,30 +63,34 @@ def plot_scatter_rasterdata(data_array1, data_array2):
     plt.ylabel("Elevation difference (mm)")
     plt.show()
     
-def plot_hydrograph(data_dir,timeseries, axes=None, ax_inset=None):   
+def plot_hydrograph(data_dir, timeseries, data, axes=None, draw_inset=False, ax_inset=None):   
 
     filename = data_dir + timeseries
-    time_step, q_lisflood, q_topmodel, sed_tot = np.loadtxt(filename, usecols=(0,1,2,4), unpack=True)
+    # get the time step array and the data metric you want to plot against it.
+    time_step, metric = get_datametric_array(filename, data)
     
+    # We check this so the function can be called within the plot_ensemble_hydrograph
+    # function, without having to duplicate axes creation every iteration.
     if axes==None:
-        fig, ax = plt.subplots()
-        
-    axes.plot(time_step, q_lisflood)
+      fig, axes = plt.subplots()
+    
+    # If we want to draw the inset, and we haven't already got an inset axes
+    # i.e. if you were using the multiple plot/ensemble plot, this would already have been created.
+    if (draw_inset==True and ax_inset==None):
+      ax_inset = create_inset_axes(axes)
+      
+    axes.plot(time_step, metric)
     axes.set_xlim(450,600)
 
-    if ax_inset==True:
-      plot_inset(axes, time_step, q_lisflood, ax_inset)
+    if ax_inset!=None:
+      plot_inset(axes, time_step, metric, ax_inset)
     
-
     
-def plot_ensemble_hydrograph(data_dir, wildcard_fname, inset=False):
+def plot_ensemble_hydrograph(data_dir, wildcard_fname, data, draw_inset=False):
     fig, ax = plt.subplots()
     
-    if inset==True:
-      ax_inset = zoomed_inset_axes(ax, 2, loc=1)
-          # hide every other tick label
-      for label in ax_inset.get_xticklabels()[::2]:
-        label.set_visible(False)
+    if draw_inset==True:
+      ax_inset = create_inset_axes(ax)
     else:
       ax_inset=None
 
@@ -94,26 +98,46 @@ def plot_ensemble_hydrograph(data_dir, wildcard_fname, inset=False):
     for f in glob.glob(data_dir + wildcard_fname):
         current_timeseries = os.path.basename(f)
         print current_timeseries
-        plot_hydrograph(data_dir, current_timeseries, ax, ax_inset)
+        plot_hydrograph(data_dir, current_timeseries, data, ax, draw_inset, ax_inset)
     
     # draw a bbox of the region of the inset axes in the parent axes and
     # connecting lines between the bbox and the inset axes area
     #mark_inset(ax, ax_inset, loc1=2, loc2=3, fc="none", ec="0.5")
+    
+def create_inset_axes(ax):
+    ax_inset = zoomed_inset_axes(ax, 2, loc=1)
+    # hide every other tick label
+    for label in ax_inset.get_xticklabels()[::2]:
+      label.set_visible(False)
+      
+    return ax_inset
             
 def plot_inset(parent_axes, x_data, y_data, ax_inset):
     ax_inset.plot(x_data, y_data)
     ax_inset.set_xlim(470,500)
     ax_inset.set_ylim(100,160)
 
+"""
+Extracts the relevant data column from the timeseries file.
+
+"""
+def get_datametric_array(filename, data_name):
+    time_step, q_lisflood, q_topmodel, sed_tot = np.loadtxt(filename, usecols=(0,1,2,4), unpack=True)
     
+    # Create a dictionary to store the keys/arrays
+    # You can add to this later without having to modify the plot_hydrography function
+    dic = { 'q_lisflood': q_lisflood,
+            'q_topmodel': q_topmodel,
+            'sed_tot': sed_tot
+          } 
+    return time_step, dic[data_name]
     
 # Run the script 
 #elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
 #plot_scatter_rasterdata(elev, total_precip)
 
-#plot_hydrograph(data_dir,timeseries)
-
-plot_ensemble_hydrograph(data_dir, wildcard_fname, inset=True)
+#plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
+plot_ensemble_hydrograph(data_dir, wildcard_fname, "q_lisflood", draw_inset=True)
 
 
 
