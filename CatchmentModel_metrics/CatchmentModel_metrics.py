@@ -63,11 +63,11 @@ def plot_scatter_rasterdata(data_array1, data_array2):
     plt.ylabel("Elevation difference (mm)")
     plt.show()
     
-def plot_hydrograph(data_dir, timeseries, data, axes=None, draw_inset=False, ax_inset=None):   
+def plot_hydrograph(data_dir, fname, metric_name, axes=None, draw_inset=False, ax_inset=None):   
 
-    filename = data_dir + timeseries
+    filename = data_dir + fname
     # get the time step array and the data metric you want to plot against it.
-    time_step, metric = get_datametric_array(filename, data)
+    time_step, metric = get_datametric_array(filename, metric_name)
     
     # We check this so the function can be called within the plot_ensemble_hydrograph
     # function, without having to duplicate axes creation every iteration.
@@ -78,15 +78,17 @@ def plot_hydrograph(data_dir, timeseries, data, axes=None, draw_inset=False, ax_
     # i.e. if you were using the multiple plot/ensemble plot, this would already have been created.
     if (draw_inset==True and ax_inset==None):
       ax_inset = create_inset_axes(axes)
-      
+    
+    # plot the main axes data
     axes.plot(time_step, metric)
     axes.set_xlim(450,600)
-
+    
+    # Now plot the inset data
     if ax_inset!=None:
       plot_inset(axes, time_step, metric, ax_inset)
     
     
-def plot_ensemble_hydrograph(data_dir, wildcard_fname, data, draw_inset=False):
+def plot_ensemble_hydrograph(data_dir, wildcard_fname, metric_name, draw_inset=False):
     fig, ax = plt.subplots()
     
     if draw_inset==True:
@@ -98,7 +100,7 @@ def plot_ensemble_hydrograph(data_dir, wildcard_fname, data, draw_inset=False):
     for f in glob.glob(data_dir + wildcard_fname):
         current_timeseries = os.path.basename(f)
         print current_timeseries
-        plot_hydrograph(data_dir, current_timeseries, data, ax, draw_inset, ax_inset)
+        plot_hydrograph(data_dir, current_timeseries, metric_name, ax, draw_inset, ax_inset)
     
     # draw a bbox of the region of the inset axes in the parent axes and
     # connecting lines between the bbox and the inset axes area
@@ -136,8 +138,8 @@ def get_datametric_array(filename, data_name):
 #elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
 #plot_scatter_rasterdata(elev, total_precip)
 
-#plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
-plot_ensemble_hydrograph(data_dir, wildcard_fname, "q_lisflood", draw_inset=True)
+plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
+#plot_ensemble_hydrograph(data_dir, wildcard_fname, "q_lisflood", draw_inset=True)
 
 
 
