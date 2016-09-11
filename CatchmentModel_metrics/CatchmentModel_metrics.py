@@ -62,12 +62,19 @@ def plot_scatter_rasterdata(data_array1, data_array2):
     plt.xlabel("Elevation (m)")
     plt.ylabel("Elevation difference (mm)")
     plt.show()
+
+def convert_timestep(time_step):
+    minutes = time_step*5
+    hours = minutes/60
+    return hours
     
 def plot_hydrograph(data_dir, fname, metric_name, axes=None, draw_inset=False, ax_inset=None):   
 
     filename = data_dir + fname
     # get the time step array and the data metric you want to plot against it.
     time_step, metric = get_datametric_array(filename, metric_name)
+    
+    hours = convert_timestep(time_step)
     
     # We check this so the function can be called within the plot_ensemble_hydrograph
     # function, without having to duplicate axes creation every iteration.
@@ -80,12 +87,16 @@ def plot_hydrograph(data_dir, fname, metric_name, axes=None, draw_inset=False, a
       ax_inset = create_inset_axes(axes)
     
     # plot the main axes data
-    axes.plot(time_step, metric)
-    axes.set_xlim(450,600)
+    line, = axes.plot(hours, metric)
+    line.set_label(fname)
+    axes.legend(bbox_to_anchor=(1, 0.5), loc='center left',prop={'size':12})
+    
+    # Tweak the xlimits to zone in on the relevnat bit of hydrograph
+    axes.set_xlim(35,55)
     
     # Now plot the inset data
     if ax_inset!=None:
-      plot_inset(axes, time_step, metric, ax_inset)
+      plot_inset(axes, hours, metric, ax_inset)
     
     
 def plot_ensemble_hydrograph(data_dir, wildcard_fname, metric_name, draw_inset=False):
@@ -105,6 +116,11 @@ def plot_ensemble_hydrograph(data_dir, wildcard_fname, metric_name, draw_inset=F
     # draw a bbox of the region of the inset axes in the parent axes and
     # connecting lines between the bbox and the inset axes area
     #mark_inset(ax, ax_inset, loc1=2, loc2=3, fc="none", ec="0.5")
+    ax.set_xlabel("simulation time (hours)")
+    ax.set_ylabel("sediment flux ($m^3$)")
+    
+    fig.savefig("test.svg", bbox_inches='tight')
+    
     
 def create_inset_axes(ax):
     ax_inset = zoomed_inset_axes(ax, 2, loc=1)
@@ -116,8 +132,8 @@ def create_inset_axes(ax):
             
 def plot_inset(parent_axes, x_data, y_data, ax_inset):
     ax_inset.plot(x_data, y_data)
-    ax_inset.set_xlim(470,500)
-    ax_inset.set_ylim(100,160)
+    ax_inset.set_xlim(38,42)
+    ax_inset.set_ylim(350,560)
 
 """
 Extracts the relevant data column from the timeseries file.
@@ -138,8 +154,8 @@ def get_datametric_array(filename, data_name):
 #elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
 #plot_scatter_rasterdata(elev, total_precip)
 
-plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
-#plot_ensemble_hydrograph(data_dir, wildcard_fname, "q_lisflood", draw_inset=True)
+#plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
+plot_ensemble_hydrograph(data_dir, wildcard_fname, "sed_tot", draw_inset=True)
 
 
 
