@@ -26,20 +26,6 @@ from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 
 
-# VARIABLES
-#data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
-data_dir = "/run/media/dav/SHETLAND/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
-#data_dir="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
-input_raster2 = "elev.txt"
-input_raster1 = "elevdiff.txt"
-#input_raster2 = "rainfall_totals_boscastle_downscaled.asc"
-
-# A text file with x, y scatter values, in case of future use
-outpt_datafile_name = "elev_vs_erosion.txt"
-
-fname = "boscastle_lumped_detachlim.dat"
-wildcard_fname = "boscastle*.dat"
-
 # Plotting parameters
 rcParams['font.family'] = 'sans-serif'
 rcParams['font.sans-serif'] = ['arial']
@@ -92,7 +78,7 @@ def plot_hydrograph(data_dir, fname, metric_name, axes=None, draw_inset=False, a
     axes.legend(bbox_to_anchor=(1, 0.5), loc='center left',prop={'size':12})
     
     # Tweak the xlimits to zone in on the relevnat bit of hydrograph
-    axes.set_xlim(35,55)
+    axes.set_xlim(35,54)
     
     # Now plot the inset data
     if ax_inset!=None:
@@ -116,9 +102,22 @@ def plot_ensemble_hydrograph(data_dir, wildcard_fname, metric_name, draw_inset=F
     # draw a bbox of the region of the inset axes in the parent axes and
     # connecting lines between the bbox and the inset axes area
     #mark_inset(ax, ax_inset, loc1=2, loc2=3, fc="none", ec="0.5")
-    ax.set_xlabel("simulation time (hours)")
-    ax.set_ylabel("sediment flux ($m^3$)")
+    set_labels(ax, metric_name)
+    save_figure(fig)
     
+
+def set_labels(ax, metric_name):
+    
+    label_dic = {
+      'q_lisflood': "water discharge ($m^3s^{-1}$)",
+      'q_topmodel': "water (TOPMODEL) discharge ($m^3s^{-1}$)",
+      'sed_tot': "sediment flux ($m^3$)"
+    }
+    
+    ax.set_xlabel("simulation time (hours)")
+    ax.set_ylabel(label_dic[metric_name])
+
+def save_figure(fig):    
     fig.savefig("test.svg", bbox_inches='tight')
     
     
@@ -132,8 +131,8 @@ def create_inset_axes(ax):
             
 def plot_inset(parent_axes, x_data, y_data, ax_inset):
     ax_inset.plot(x_data, y_data)
-    ax_inset.set_xlim(38,42)
-    ax_inset.set_ylim(350,560)
+    ax_inset.set_xlim(39,42)
+    ax_inset.set_ylim(90,160)
 
 """
 Extracts the relevant data column from the timeseries file.
@@ -149,13 +148,28 @@ def get_datametric_array(filename, data_name):
             'sed_tot': sed_tot
           } 
     return time_step, dic[data_name]
-    
+ 
+# VARIABLES
+data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
+#data_dir = "/run/media/dav/SHETLAND/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
+#data_dir="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
+input_raster2 = "elev.txt"
+input_raster1 = "elevdiff.txt"
+#input_raster2 = "rainfall_totals_boscastle_downscaled.asc"
+
+# A text file with x, y scatter values, in case of future use
+outpt_datafile_name = "elev_vs_erosion.txt"
+
+fname = "boscastle_lumped_detachlim.dat"
+wildcard_fname = "ryedale*.dat"
+
+   
 # Run the script 
 #elev, total_precip = create_data_arrays(data_dir, input_raster2, input_raster1)
 #plot_scatter_rasterdata(elev, total_precip)
 
 #plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
-plot_ensemble_hydrograph(data_dir, wildcard_fname, "sed_tot", draw_inset=True)
+plot_ensemble_hydrograph(data_dir, "boscastle_*", "q_lisflood", draw_inset=True)
 
 
 
