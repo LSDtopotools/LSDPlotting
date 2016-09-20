@@ -25,6 +25,7 @@ from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 
 
+
 # Plotting parameters
 rcParams['font.family'] = 'sans-serif'
 rcParams['font.sans-serif'] = ['arial']
@@ -56,11 +57,15 @@ def convert_timestep(time_step):
     return hours
 
 
-class CatchmentPlot(object):
+class CaesarData(object):
 
     def __init__(self, data_dir, fname):
         self.data_dir = data_dir
         self.fname = fname
+        self.fig, self.ax = plt.subplots()
+        self.ax_inset = None
+
+        self.num_graphs = len(glob.glob(self.data_dir + self.fname))
 
     """
     Extracts the relevant data column from the timeseries file.
@@ -79,7 +84,7 @@ class CatchmentPlot(object):
                }
         return time_step, dic[data_name]
 
-    def plot_hydrograph(self, metric_name, current_timeseries=None, axes=None,
+    def plot_hydrograph(self, metric_name, current_timeseries=None,
                         draw_inset=False, ax_inset=None):
         if current_timeseries is None:
             current_timeseries = self.fname
@@ -88,55 +93,51 @@ class CatchmentPlot(object):
         # you want to plot against it.
         time_step, metric = self.get_datametric_array(filename, metric_name)
         hours = convert_timestep(time_step)
-        # We check this so the function can be called
-        # within the plot_ensemble_hydrograph
-        # function, without having to duplicate axes creation every iteration.
-        if axes is None:
-            fig, axes = plt.subplots()
 
         # If we want to draw the inset,
         # and we haven't already got an inset axes
         # i.e. if you were using the multiple plot/ensemble plot,
         # this would already have been created.
-        if (draw_inset is True and ax_inset is None):
-            ax_inset = self.create_inset_axes(axes)
+        if (draw_inset is True and self.ax_inset is None):
+            self.ax_inset = self.create_inset_axes()
 
         # plot the main axes data
-        line, = axes.plot(hours, metric)
-        line.set_label(fname)
-        axes.legend(bbox_to_anchor=(1, 0.5),
-                    loc='center left', prop={'size': 12})
+        line, = self.ax.plot(hours, metric)
+        line.set_label(current_timeseries)
+        self.ax.legend(bbox_to_anchor=(1, 0.5),
+                       loc='center left', prop={'size': 12})
 
         # Tweak the xlimits to zone in on the relevnat bit of hydrograph
-        axes.set_xlim(35, 54)
+        self.ax.set_xlim(35, 54)
 
         # Now plot the inset data
-        if ax_inset is not None:
-            self.plot_inset(axes, hours, metric, ax_inset)
+        if self.ax_inset is not None:
+            self.plot_inset(hours, metric)
 
-    def plot_ensemble_hydrograph(self,
-                                 metric_name, draw_inset=False):
-        fig, ax = plt.subplots()
+    def plot_ensemble_hydrograph(self, metric_name, draw_inset=False):
+
+        cm = plt.get_cmap('gist_rainbow')
+        self.ax.set_color_cycle([cm(1.*i/self.num_graphs) for i in range(self.num_graphs)])
 
         if draw_inset is True:
-            ax_inset = self.create_inset_axes(ax)
+            self.ax_inset = self.create_inset_axes()
         else:
-            ax_inset = None
+            self.ax_inset = None
 
         # Loop through the files in a dir and plot them all on the same axes
         for f in glob.glob(self.data_dir + self.fname):
             current_timeseries = os.path.basename(f)
             print current_timeseries
-            self.plot_hydrograph(metric_name, current_timeseries,
-                                 ax, draw_inset, ax_inset)
+            self.plot_hydrograph(metric_name, current_timeseries, draw_inset)
+
+        # for i in caesar_cube.dim(3) # loop through 3rd dims of array
 
         # draw a bbox of the region of the inset axes in the parent axes and
         # connecting lines between the bbox and the inset axes area
         # mark_inset(ax, ax_inset, loc1=2, loc2=3, fc="none", ec="0.5")
-        self.set_labels(ax, metric_name)
-        self.save_figure(fig)
+        self.set_labels(metric_name)
 
-    def set_labels(self, ax, metric_name):
+    def set_labels(self, metric_name):
 
         label_dic = {
           'q_lisflood': "water discharge ($m^3s^{-1}$)",
@@ -144,29 +145,41 @@ class CatchmentPlot(object):
           'sed_tot': "sediment flux ($m^3$)"
         }
 
-        ax.set_xlabel("simulation time (hours)")
-        ax.set_ylabel(label_dic[metric_name])
+        self.ax.set_xlabel("simulation time (hours)")
+        self.ax.set_ylabel(label_dic[metric_name])
 
-    def save_figure(self, fig):
-        fig.savefig("test.svg", bbox_inches='tight')
+    def save_figure(self, save_name="test.png"):
+        self.fig.savefig(save_name, bbox_inches='tight')
 
-    def create_inset_axes(self, ax):
-        ax_inset = zoomed_inset_axes(ax, 2, loc=1)
+    def create_inset_axes(self):
+        ax_inset = zoomed_inset_axes(self.ax, 2, loc=1)
+
+        cm = plt.get_cmap('gist_rainbow')
+        ax_inset.set_color_cycle([cm(1.*i/self.num_graphs)
+                                 for i in range(self.num_graphs)])
+
         # hide every other tick label
         for label in ax_inset.get_xticklabels()[::2]:
             label.set_visible(False)
 
         return ax_inset
 
-    def plot_inset(self, parent_axes, x_data, y_data, ax_inset):
-        ax_inset.plot(x_data, y_data)
-        ax_inset.set_xlim(39, 42)
-        ax_inset.set_ylim(90, 160)
+    def plot_inset(self, x_data, y_data):
 
+        self.ax_inset.plot(x_data, y_data)
+        self.ax_inset.set_xlim(39, 42)
+        self.ax_inset.set_ylim(90, 160)
 
+    def showfig(self):
+        """
+        Note: this will only work in GUI. If you are using an IPython
+        console session, for example, just type CatchmentPlot.fig to re-draw
+        the figure in the console.
+        """
+        self.fig.show()
 
 # VARIABLES
-data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
+data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/"
 # data_dir = "/run/media/dav/SHETLAND/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
 # data_dir="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
 input_raster2 = "elev.txt"
@@ -177,7 +190,7 @@ input_raster1 = "elevdiff.txt"
 outpt_datafile_name = "elev_vs_erosion.txt"
 
 fname = "boscastle_lumped_detachlim.dat"
-wildcard_fname = "ryedale*.dat"
+wildcard_fname = "ryedale_*.dat"
 
 
 # Run the script
@@ -186,13 +199,16 @@ wildcard_fname = "ryedale*.dat"
 
 #plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
 
+
+NUM_COLOURS = 8
+
 # OOP way
-BoscastleHydro = CatchmentPlot(data_dir, "boscastle_*")
-BoscastleHydro.plot_ensemble_hydrograph("q_lisflood", draw_inset=True)
+RyedaleHydro = CaesarData(data_dir, "boscastle_*.dat")
+RyedaleHydro.plot_ensemble_hydrograph("sed_tot", draw_inset=True)
 
 
 
-
+# ax.set_color_cycle([cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS)])
 
 
 
