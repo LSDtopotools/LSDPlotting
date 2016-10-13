@@ -21,7 +21,7 @@ from pylab import *
 from scipy import stats
 import matplotlib.ticker as plticker
 
-def make_plots():
+def make_plots(DEM_name, DataDirectory):
     
 
     # Set up fonts for plots
@@ -34,10 +34,9 @@ def make_plots():
     #   READ IN THE DATA CLOUD    #
     #                             #
     ###############################
-
-    DataDirectory =  './'    
-    FileName = 'fr1m_nogaps_drainage_density_cloud.txt'
-    OutputFigureName = 'drainage_density_fr1m'
+  
+    FileName = DEM_name+'_drainage_density_cloud.txt'
+    OutputFigureName = DEM_name+'_drainage_density'
     OutputFigureFormat = 'pdf'
     f = open(DataDirectory + FileName,'r')  # open file
     lines = f.readlines()   # read in the data
@@ -68,7 +67,7 @@ def make_plots():
     #                              #
     ################################    
 
-    FileNameBinned = 'fr1m_nogaps_drainage_density_binned.txt'
+    FileNameBinned = DEM_name+'_drainage_density_binned.txt'
     g = open(DataDirectory + FileNameBinned,'r')
     lines_binned = g.readlines()
     no_lines_binned = len(lines_binned)
@@ -120,7 +119,7 @@ def make_plots():
         
     line = gradient1*mean_cht+intercept1
     
-   # do a power law regression on drainage density vs mean CHT
+    # do a power law regression on drainage density vs mean CHT
     drainage_density_log = log10(drainage_density[np.isnan(mean_cht)==False])
     mean_cht_log = log10(mean_cht[np.isnan(mean_cht)==False])
 
