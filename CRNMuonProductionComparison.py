@@ -56,8 +56,8 @@ def get_production_data(Directory):
 
 def plot_production_rates():
 
-    Directory = "C://basin_data//CosmoPaper//Results//"
-    #Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
+    #Directory = "C://basin_data//CosmoPaper//Results//"
+    Directory = "T://Papers_LaTeX//crn_basinwide_paper//Compiled_results//"
     Dirname = LSDost.ReformatSeperators(Directory)
     Dirname = LSDost.AppendSepToDirectoryPath(Dirname)
     
@@ -93,11 +93,11 @@ def plot_production_rates():
     
     # 3.26 inches = 83 mm, the size of a 1 column figure
     #Fig1 = plt.figure(1, facecolor='white',figsize=(3.26,3.26)) 
-    Fig1 = plt.figure(1, facecolor='white',figsize=(6.5,3.26)) 
+    Fig1 = plt.figure(1, facecolor='white',figsize=(3.26,6)) 
 
     # gendepth a grid. 
     gs = GridSpec(100,100,bottom=0.1,left=0.1,right=1.0,top=1.0) 
-    ax = Fig1.add_subplot(gs[10:95,2:42])    
+    ax = Fig1.add_subplot(gs[2:42,10:95])    
     
     ax.plot(mu_CRONUS,depth, "r-", label = "CRONUS",linewidth = 2)
     ax.plot(mu_Braucher,depth, "k-", label = "Braucher",linewidth = 2)
@@ -137,7 +137,7 @@ def plot_production_rates():
 
     # generate a grid. 
     #gs2 = GridSpec(100,75,bottom=0.13,left=0.13,right=0.90,top=0.95) 
-    ax2 = Fig1.add_subplot(gs[10:95,57:97])    
+    ax2 = Fig1.add_subplot(gs[57:97,10:95])    
     
     ax2.plot(total_CRONUS,depth, "r-", label = "CRONUS",linewidth = 2)
     ax2.plot(total_Braucher,depth, "k-", label = "Braucher",linewidth = 2)

@@ -37,6 +37,7 @@ def CollatenewCRONUScomparisonCRNData():
     CRNDataList = []  
     CRNprefixes = []
     PaperNames = []
+    PaperColours = []
     ScalingNames = []
     
     label_size = 8
@@ -146,8 +147,8 @@ def CollatenewCRONUScomparisonCRNData():
     gs = GridSpec(100,75,bottom=0.13,left=0.13,right=0.98,top=0.85) 
     ax = Fig1.add_subplot(gs[10:100,5:75])   
     
-    ax.plot(P_B,P_err,"ro",markersize=4, label = "Palumbo et al., 2010",markeredgewidth=1)
-    ax.plot(D_B,D_err,"bo",markersize=4, label = "Dethier et al., 2014",markeredgewidth=1)
+    ax.plot(P_B,P_err,"o",markersize=4, color = "magenta", label = "Palumbo et al., 2010",markeredgewidth=1)
+    ax.plot(D_B,D_err,"ro",markersize=4, label = "Dethier et al., 2014",markeredgewidth=1)
 
     ax.spines['top'].set_linewidth(1)
     ax.spines['left'].set_linewidth(1)
