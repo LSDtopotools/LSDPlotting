@@ -75,16 +75,31 @@ class CaesarTimeseriesPlot(object):
     Extracts the relevant data column from the timeseries file.
     """
     def get_datametric_array(self, filename, data_name):
-        time_step, q_lisflood, \
-            q_topmodel, sed_tot = np.loadtxt(filename,
-                                             usecols=(0, 1, 2, 4), unpack=True)
+        time_step, \
+        q_lisflood, \
+        q_topmodel, \
+        sed_tot, \
+        d1, d2, d3, d4, d5, \
+        d6, d7, d8, d9 = np.loadtxt(filename,
+                                    usecols=(0, 1, 2, 4, 5, 6, 7,
+                                             8, 9, 10, 11, 12, 13),
+                                             unpack=True)
 
         # Create a dictionary to store the keys/arrays
         # You can add to this later without having to modify
         # the plot_hydrography function
         dic = {'q_lisflood': q_lisflood,
                'q_topmodel': q_topmodel,
-               'sed_tot': sed_tot
+               'sed_tot': sed_tot,
+               'd1': d1,
+               'd2': d2,
+               'd3': d3,
+               'd4': d4,
+               'd5': d5,
+               'd6': d6,
+               'd7': d7,
+               'd8': d8,
+               'd9': d9,
                }
         return time_step, dic[data_name]
 
@@ -109,12 +124,13 @@ class CaesarTimeseriesPlot(object):
             self.ax_inset = self.create_inset_axes()
 
         # plot the main axes data
-        line, = self.ax.plot(hours, metric, linewidth=2)
+        line, = self.ax.plot(hours, metric, linewidth=1)
         line.set_label(line_label)
         #labelLine(line, 45)
 
         # Tweak the xlimits to zone in on the relevnat bit of hydrograph
-        self.ax.set_xlim(40, 50)
+        self.ax.set_xlim(0, 400)
+        self.ax.set_ylim(0,60)
 
         # Now plot the inset data
         if self.ax_inset is not None:
@@ -124,7 +140,7 @@ class CaesarTimeseriesPlot(object):
 
     def plot_ensemble_hydrograph(self, draw_inset=False, labellines=False):
 
-        cm = plt.get_cmap('winter')
+        cm = plt.get_cmap('jet')
         self.ax.set_color_cycle([cm(1.*i/self.num_graphs)
                                 for i in range(self.num_graphs)])
 
@@ -154,7 +170,16 @@ class CaesarTimeseriesPlot(object):
         label_dic = {
           'q_lisflood': "water discharge ($m^3s^{-1}$)",
           'q_topmodel': "water (TOPMODEL) discharge ($m^3s^{-1}$)",
-          'sed_tot': "sediment flux ($m^3$)"
+          'sed_tot': "sediment flux ($m^3$)",
+          'd1': "d1 proportion",
+          'd2': "d2 proportion",
+          'd3': "d3 proportion",
+          'd4': "d4 proportion",
+          'd5': "d5 proportion",
+          'd6': "d6 proportion",
+          'd7': "d7 proportion",
+          'd8': "d8 proportion",
+          'd9': "d9 proportion",
         }
 
         self.ax.set_xlabel("simulation time (hours)")
@@ -224,7 +249,8 @@ class CaesarTimeseriesPlot(object):
 
 
 # VARIABLES
-data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/"
+#data_dir = "/mnt/SCRATCH/Analyses/HydrogeomorphPaper/"
+data_dir = "/mnt/SCRATCH/Analyses/RegressionTest/"
 #data_dir = "/run/media/dav/SHETLAND/Analyses/HydrogeomorphPaper/BOSCASTLE/Analysis/"
 #data_dir="/mnt/WORK/Dev/PyToolsPhD/Radardata_tools"
 #data_dir = "/mnt/SCRATCH/Analyses/Topmodel_Sensitivity/Ryedale_storms_calibrate/"
@@ -250,11 +276,11 @@ external_file_data = "Ryedale72hours_measured.csv"
 
 
 # OOP way
-BosHydroS = CaesarTimeseriesPlot(data_dir, "ryedale*.dat", "q_lisflood")
-BosHydroS.plot_ensemble_hydrograph(draw_inset=False, labellines=False)
+SwaleHydroS = CaesarTimeseriesPlot(data_dir, "*.dat", "sed_tot")
+SwaleHydroS.plot_ensemble_hydrograph(draw_inset=False, labellines=False)
 #BosHydroS.plot_external_data(data_dir + external_file_data)
-BosHydroS.plot_legend()
-BosHydroS.save_figure("Ryedale_rainfall_sens_hydrograph.svg")
+SwaleHydroS.plot_legend()
+#SwaleHydroS.save_figure("TEST.svg")
 
 # ax.set_color_cycle([cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS)])
 
