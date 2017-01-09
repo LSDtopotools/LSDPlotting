@@ -20,18 +20,41 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+from matplotlib.patches import Rectangle
 
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 
 # This is a custom module
-from label_lines import *
+
+from label_lines.label_lines import *
 
 
 # Plotting parameters
-rcParams['font.family'] = 'sans-serif'
-rcParams['font.sans-serif'] = ['arial']
-rcParams['font.size'] = 16
+def init_plotting():
+    plt.rcParams['figure.figsize'] = (8, 8)
+    plt.rcParams['font.size'] = 17
+    plt.rcParams['font.family'] = 'Times New Roman'
+    plt.rcParams['axes.labelsize'] = 1.2*plt.rcParams['font.size']
+    plt.rcParams['axes.titlesize'] = 1.2*plt.rcParams['font.size']
+    plt.rcParams['legend.fontsize'] = plt.rcParams['font.size']
+    plt.rcParams['xtick.labelsize'] = plt.rcParams['font.size']
+    plt.rcParams['ytick.labelsize'] = plt.rcParams['font.size']
+    plt.rcParams['savefig.dpi'] = 2*plt.rcParams['savefig.dpi']
+    plt.rcParams['xtick.major.size'] = 3
+    plt.rcParams['xtick.minor.size'] = 3
+    plt.rcParams['xtick.major.width'] = 1
+    plt.rcParams['xtick.minor.width'] = 1
+    plt.rcParams['ytick.major.size'] = 3
+    plt.rcParams['ytick.minor.size'] = 3
+    plt.rcParams['ytick.major.width'] = 1
+    plt.rcParams['ytick.minor.width'] = 1
+    plt.rcParams['legend.frameon'] = True
+    plt.rcParams['legend.loc'] = 'center left'
+    plt.rcParams['axes.linewidth'] = 1
+    plt.rcParams['xtick.minor.visible'] = True
+    plt.rcParams['ytick.minor.visible'] = True
+    plt.rcParams['lines.linewidth'] = 1.5
 
 
 def create_data_arrays(data_dir, input_raster1, input_raster2):
@@ -160,6 +183,7 @@ class CaesarTimeseriesPlot(object):
 
     def make_line_label(self, fname):
         part = fname.split('_')[0]
+        # part = "m = " + part
         print part
         return part
 
@@ -186,8 +210,19 @@ class CaesarTimeseriesPlot(object):
         self.ax_inset.set_ylim(90, 160)
 
     def plot_legend(self):
-        self.ax.legend(bbox_to_anchor=(0.75, 0.75),
-               loc='center left', prop={'size': 12})
+        extra = Rectangle((0, 0), 1, 1,
+                          fc="w",
+                          fill=False,
+                          edgecolor='none',
+                          linewidth=0)
+
+        handles, labels = self.ax.get_legend_handles_labels()
+        handles.insert(0,extra)
+        labels.insert(0, "Modelled discharge \n$m$ value:")
+
+        self.ax.legend(handles, labels,
+                       #bbox_to_anchor=(0.75, 0.75),
+                       loc='top right')
 
     def showfig(self):
         """
@@ -205,7 +240,7 @@ class CaesarTimeseriesPlot(object):
         x, y = np.loadtxt(filename, unpack=True, delimiter=',')
         hours = convert_timestep(x)
         line, = self.ax.plot(hours, y, '--k', linewidth=2)
-        line.set_label("Measured")
+        line.set_label("Measured discharge")
 
 
 
@@ -235,13 +270,13 @@ external_file_data = "Ryedale72hours_measured.csv"
 
 #plot_hydrograph(data_dir, fname, "q_lisflood", draw_inset=True)
 
-
+init_plotting()
 # OOP way
 BosHydro = CaesarTimeseriesPlot(data_dir, "*.dat", "q_lisflood")
 BosHydro.plot_ensemble_hydrograph(draw_inset=False)
 BosHydro.plot_external_data(data_dir + external_file_data)
 BosHydro.plot_legend()
-BosHydro.save_figure("Ryedale_M_sens_hydro.svg")
+#BosHydro.save_figure("Ryedale_M_sens_hydro.svg")
 
 # ax.set_color_cycle([cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS)])
 
